@@ -1,5 +1,6 @@
 package br.capitalis.models.db_entity;
 
+
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,24 +13,20 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @Entity
-public class Pesquisa {
-
+public class Resposta_Geral {
     @Id
     @GeneratedValue
-    private Long id;
-    private Long id_criador;
-    private String titulo;
-    private String descricao;
+    private Long id_resposta;
+    private Long id_usuario;
 
-    @ElementCollection (targetClass = Integer.class, fetch = FetchType.EAGER)
-    @CollectionTable(name="Pesquisa_Pergunta",joinColumns = @JoinColumn(name="id"))
+    @ElementCollection(targetClass = Integer.class, fetch = FetchType.EAGER)
+    @CollectionTable(name="Resposta_Pergunta",joinColumns = @JoinColumn(name="id_resposta"))
     @Column (name="perguntas",nullable = false)
     private List<Integer> perguntas;
 
     @ElementCollection (targetClass = Integer.class, fetch = FetchType.EAGER)
-    @CollectionTable(name="Pesquisa_Resposta",joinColumns = @JoinColumn(name="id"))
+    @CollectionTable(name="RespostasGeral_Resposta",joinColumns = @JoinColumn(name="id_resposta"))
     @Column (name="respostas",nullable = false)
     private List<Integer> respostas;
-
 
 }
