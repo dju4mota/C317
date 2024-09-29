@@ -1,0 +1,11 @@
+.dashboard h1 {
+    margin-bottom: 20px; /* Espaçamento entre o h1 e o p */
+}
+
+.dashboard p {
+    margin-bottom: 15px; /* Espaçamento entre o p e o button */
+}
+
+.dashboard button {
+    margin-top: 10px; /* Caso queira adicionar margem ao button também */
+}
