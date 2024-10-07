@@ -2,6 +2,7 @@ package br.capitalis.Pesquisa;
 
 
 import br.capitalis.Pesquisa.pergunta.Pergunta;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,31 +10,40 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Entity
 @Getter
 @Setter
 @EqualsAndHashCode
 public class Pesquisa {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
     private Long id_criador;
+    @OneToMany(mappedBy = "pesquisa")
     private List<Pergunta> perguntas;
+
 
     public Pesquisa(Long id, String titulo, Long id_criador) {
         this.id = id;
         this.titulo = titulo;
         this.id_criador = id_criador;
-        perguntas = new ArrayList<>();
+        //perguntas = new ArrayList<>();
     }
 
     public Pesquisa(DTO_Post_Pesquisa dtoPesquisa) {
-        this.id = dtoPesquisa.id();
         this.id_criador = dtoPesquisa.id_criador();
         this.titulo = dtoPesquisa.titulo();
-        perguntas = new ArrayList<>();
+        //perguntas = new ArrayList<>();
     }
 
-    public void addPergunta(Pergunta pergunta){
-        perguntas.add(pergunta);
+    public Pesquisa() {
+
     }
+
+//    public void addPergunta(Pergunta pergunta){
+//        perguntas.add(pergunta);
+//    }
 }
