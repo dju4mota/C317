@@ -43,7 +43,14 @@ public class Pesquisa {
 
     }
 
-//    public void addPergunta(Pergunta pergunta){
-//        perguntas.add(pergunta);
-//    }
+    public void atualizarDados(DTO_Put_Pesquisa dadosPesquisa) {
+        if(dadosPesquisa.id_criador()!= null) {
+            this.id_criador = dadosPesquisa.id_criador();
+        }
+        if(dadosPesquisa.titulo()!= null) {
+            this.titulo = dadosPesquisa.titulo();
+        }
+    }
+
+
 }

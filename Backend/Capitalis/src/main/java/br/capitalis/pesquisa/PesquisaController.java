@@ -4,14 +4,10 @@ import br.capitalis.Pesquisa.pergunta.DTO_Get_Pergunta;
 import br.capitalis.Pesquisa.pergunta.DTO_Post_Pergunta;
 import br.capitalis.Pesquisa.pergunta.Pergunta;
 import br.capitalis.Pesquisa.pergunta.PerguntaRepository;
-import br.capitalis.resultado.resposta.TipoDeResposta;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,32 +16,22 @@ import java.util.stream.Stream;
 
 public class PesquisaController {
 
-//    Dictionary<Long, Pesquisa> pesquisaRepository;
-
     @Autowired
     PesquisaRepository pesquisaRepository;
     @Autowired
     PerguntaRepository perguntaRepository;
 
-    public PesquisaController() {
-//        pesquisaRepository = new Hashtable<>();
-//        pesquisaRepository.put(123456L, new Pesquisa(123456L, "pesquisa teste", 1234L));
-////        pesquisaRepository.get(123456L).addPergunta(new Pergunta(123456L,
-////                "pergunta de teste", "pergunta 1", TipoDeResposta.Texto));
-//        pesquisaRepository.put(12567L, new Pesquisa(12567L, "pesquisa teste 2", 1234L));
-    }
+    // ****** Create ******
 
-
-    // **** CRUD ****
-
-    // Create
     @PostMapping
+    @Transactional
     public String criarPesquisa(@RequestBody DTO_Post_Pesquisa dto_pesquisa) {
         pesquisaRepository.save(new Pesquisa(dto_pesquisa));
         return "Pesquisa criada";
     }
 
     @PostMapping("/{id_pesquisa}/pergunta")
+    @Transactional
     public String adicionarPergunta(@PathVariable Long id_pesquisa, @RequestBody DTO_Post_Pergunta dto_pergunta) {
 
         Optional<Pesquisa> opt = pesquisaRepository.findById(id_pesquisa);
@@ -60,8 +46,9 @@ public class PesquisaController {
     }
 
 
-    // Read
-    // todas as pesquisas
+    // ****** Read ******
+
+    // todas as pesquisas - TODO page
     @GetMapping
     public Stream<DTO_Get_Pesquisa> getTodasPesquisas() {
         return pesquisaRepository.findAll().stream().map(DTO_Get_Pesquisa::new);
@@ -74,7 +61,7 @@ public class PesquisaController {
         return pesquisa.map(DTO_Get_Pesquisa::new).orElse(null);
     }
 
-    // todas as perguntas de 1 pesquisa
+    // todas as perguntas de 1 pesquisa - TODO page
     @GetMapping("/{id}/perguntas")
     public Stream<DTO_Get_Pergunta> getPerguntas(@PathVariable Long id) {
         Optional<Pesquisa> pesquisa = pesquisaRepository.findById(id);
@@ -85,7 +72,7 @@ public class PesquisaController {
         return null;
     }
 
-    // todas as perguntas
+    // todas as perguntas - TODO page
     @GetMapping("/perguntas")
     public Stream<DTO_Get_Pergunta> getTodasPerguntas() {
         return perguntaRepository.findAll().stream().map(DTO_Get_Pergunta::new);
@@ -99,15 +86,18 @@ public class PesquisaController {
     }
 
 
-    // Update
+    // ****** Update ******
 
     // update pesquisa
-//    @PutMapping()
-//    public Pesquisa atualizaPesquias(@RequestBody DTO_Post_Pesquisa dto_pesquisa) {
-//        return pesquisaRepository.put(dto_pesquisa.id(), new Pesquisa(dto_pesquisa));
-//    }
+    @PutMapping()
+    @Transactional
+    public void atualizaPesquias(@RequestBody DTO_Put_Pesquisa dtoPutPesquisa) {
+        Pesquisa pesquisa = pesquisaRepository.getReferenceById(dtoPutPesquisa.id());
+        pesquisa.atualizarDados(dtoPutPesquisa);
+    }
 
     // update pergunta
+
 
 
     // Delete
@@ -118,5 +108,5 @@ public class PesquisaController {
 //        return "Pesquisa deletada";
 //    }
 
-    // deletar pergunta especifica
+    // deletar pergunta
 }
