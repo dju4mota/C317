@@ -1,7 +1,7 @@
 package br.capitalis.Pesquisa;
 
 
-import br.capitalis.pergunta.Pergunta;
+import br.capitalis.Pesquisa.pergunta.Pergunta;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

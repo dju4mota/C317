@@ -1,6 +1,7 @@
-package br.capitalis.pergunta;
+package br.capitalis.Pesquisa.pergunta;
 
 
+import br.capitalis.resultado.resposta.TipoDeResposta;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +14,9 @@ public class Pergunta {
     private Long id_pergunta;
     private String titulo;
     private String descricao;
-    private String tipoDeResposta;
+    private TipoDeResposta tipoDeResposta;
 
-    public Pergunta(Long id_pergunta, String titulo, String descricao, String tipoDeResposta) {
+    public Pergunta(Long id_pergunta, String titulo, String descricao, TipoDeResposta tipoDeResposta) {
         this.id_pergunta = id_pergunta;
         this.titulo = titulo;
         this.descricao = descricao;

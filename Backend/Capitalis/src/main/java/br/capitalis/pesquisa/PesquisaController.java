@@ -1,7 +1,8 @@
 package br.capitalis.Pesquisa;
 
-import br.capitalis.pergunta.DTO_Post_Pergunta;
-import br.capitalis.pergunta.Pergunta;
+import br.capitalis.Pesquisa.pergunta.DTO_Post_Pergunta;
+import br.capitalis.Pesquisa.pergunta.Pergunta;
+import br.capitalis.resultado.resposta.TipoDeResposta;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -17,7 +18,7 @@ public class PesquisaController {
         pesquisas = new Hashtable<>();
         pesquisas.put(123456L,new Pesquisa(123456L,"pesquisa teste", 1234L));
         pesquisas.get(123456L).addPergunta(new Pergunta(123456L,
-                "pergunta de teste", "pergunta 1", "texto"));
+                "pergunta de teste", "pergunta 1", TipoDeResposta.Texto));
         pesquisas.put(12567L,new Pesquisa(12567L,"pesquisa teste 2", 1234L));
     }
 
