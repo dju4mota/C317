@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("api/v1/pesquisas")
-
 public class PesquisaController {
 
     @Autowired
