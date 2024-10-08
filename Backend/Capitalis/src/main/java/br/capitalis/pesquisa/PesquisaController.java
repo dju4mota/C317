@@ -101,7 +101,7 @@ public class PesquisaController {
     }
 
     // update pergunta
-    @PutMapping()
+    @PutMapping("/pergunta")
     @Transactional
     public void atualizaPergunta(@RequestBody PutPergunta dtoPutPergunta) {
         Pergunta pergunta  = perguntaRepository.getReferenceById(dtoPutPergunta.id_pergunta());
@@ -119,7 +119,7 @@ public class PesquisaController {
     }
 
     // deletar pergunta
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/pergunta/{id}")
     public String deletarPergunta(@PathVariable Long id) {
         perguntaRepository.deleteById(id);
         return "Pergunta deletada";
