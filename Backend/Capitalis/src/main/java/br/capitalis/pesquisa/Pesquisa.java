@@ -1,13 +1,11 @@
 package br.capitalis.Pesquisa;
 
-
 import br.capitalis.Pesquisa.pergunta.Pergunta;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,13 +28,11 @@ public class Pesquisa {
         this.id = id;
         this.titulo = titulo;
         this.id_criador = id_criador;
-        //perguntas = new ArrayList<>();
     }
 
     public Pesquisa(DTO_Post_Pesquisa dtoPesquisa) {
         this.id_criador = dtoPesquisa.id_criador();
         this.titulo = dtoPesquisa.titulo();
-        //perguntas = new ArrayList<>();
     }
 
     public Pesquisa() {

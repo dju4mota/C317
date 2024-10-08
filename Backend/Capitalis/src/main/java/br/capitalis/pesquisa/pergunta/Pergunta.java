@@ -1,6 +1,5 @@
 package br.capitalis.Pesquisa.pergunta;
 
-
 import br.capitalis.Pesquisa.Pesquisa;
 import br.capitalis.resultado.resposta.TipoDeResposta;
 import jakarta.persistence.*;
@@ -8,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Optional;
 
 
 @Entity
@@ -45,6 +43,18 @@ public class Pergunta {
 
     public Pergunta() {
 
+    }
+
+    public void atualizarDados(DTO_Put_Pergunta dadosPergunta) {
+        if(dadosPergunta.descricao()!= null) {
+            this.descricao = dadosPergunta.descricao();
+        }
+        if(dadosPergunta.titulo()!= null) {
+            this.titulo = dadosPergunta.titulo();
+        }
+        if(dadosPergunta.tipoDeResposta()!= null) {
+            this.tipoDeResposta = dadosPergunta.tipoDeResposta();
+        }
     }
 
 

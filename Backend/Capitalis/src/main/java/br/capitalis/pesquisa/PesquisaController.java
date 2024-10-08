@@ -1,9 +1,6 @@
 package br.capitalis.Pesquisa;
 
-import br.capitalis.Pesquisa.pergunta.DTO_Get_Pergunta;
-import br.capitalis.Pesquisa.pergunta.DTO_Post_Pergunta;
-import br.capitalis.Pesquisa.pergunta.Pergunta;
-import br.capitalis.Pesquisa.pergunta.PerguntaRepository;
+import br.capitalis.Pesquisa.pergunta.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +17,7 @@ public class PesquisaController {
     PesquisaRepository pesquisaRepository;
     @Autowired
     PerguntaRepository perguntaRepository;
+
 
     // ****** Create ******
 
@@ -91,22 +89,33 @@ public class PesquisaController {
     // update pesquisa
     @PutMapping()
     @Transactional
-    public void atualizaPesquias(@RequestBody DTO_Put_Pesquisa dtoPutPesquisa) {
+    public void atualizaPesquisa(@RequestBody DTO_Put_Pesquisa dtoPutPesquisa) {
         Pesquisa pesquisa = pesquisaRepository.getReferenceById(dtoPutPesquisa.id());
         pesquisa.atualizarDados(dtoPutPesquisa);
     }
 
     // update pergunta
+    @PutMapping()
+    @Transactional
+    public void atualizaPergunta(@RequestBody DTO_Put_Pergunta dtoPutPergunta) {
+        Pergunta pergunta  = perguntaRepository.getReferenceById(dtoPutPergunta.id_pergunta());
+        pergunta.atualizarDados(dtoPutPergunta);
+    }
 
 
+    // ****** Delete ******
 
-    // Delete
-//
-//    @DeleteMapping("/{id}")
-//    public String deletePesquisa(@PathVariable Long id) {
-//        pesquisaRepository.remove(id);
-//        return "Pesquisa deletada";
-//    }
+    // delete pesquisa - TODO apagar as perguntas e respostas dessa pesquisa
+    @DeleteMapping("/{id}")
+    public String deletarPesquisa(@PathVariable Long id) {
+        pesquisaRepository.deleteById(id);
+        return "Pesquisa deletada";
+    }
 
     // deletar pergunta
+    @DeleteMapping("/{id}")
+    public String deletarPergunta(@PathVariable Long id) {
+        perguntaRepository.deleteById(id);
+        return "Pergunta deletada";
+    }
 }
