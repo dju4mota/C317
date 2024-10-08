@@ -1,6 +1,6 @@
-package br.capitalis.Pesquisa;
+package br.capitalis.Pesquisa.dto;
 
-public record DTO_Put_Pesquisa(
+public record PutPesquisa(
         Long id,
         String titulo,
         Long id_criador

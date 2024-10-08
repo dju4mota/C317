@@ -1,5 +1,7 @@
 package br.capitalis.Pesquisa;
 
+import br.capitalis.Pesquisa.dto.PostPesquisa;
+import br.capitalis.Pesquisa.dto.PutPesquisa;
 import br.capitalis.Pesquisa.pergunta.Pergunta;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -30,7 +32,7 @@ public class Pesquisa {
         this.id_criador = id_criador;
     }
 
-    public Pesquisa(DTO_Post_Pesquisa dtoPesquisa) {
+    public Pesquisa(PostPesquisa dtoPesquisa) {
         this.id_criador = dtoPesquisa.id_criador();
         this.titulo = dtoPesquisa.titulo();
     }
@@ -39,7 +41,7 @@ public class Pesquisa {
 
     }
 
-    public void atualizarDados(DTO_Put_Pesquisa dadosPesquisa) {
+    public void atualizarDados(PutPesquisa dadosPesquisa) {
         if(dadosPesquisa.id_criador()!= null) {
             this.id_criador = dadosPesquisa.id_criador();
         }

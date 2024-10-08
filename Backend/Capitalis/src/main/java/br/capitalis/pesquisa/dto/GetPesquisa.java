@@ -1,11 +1,13 @@
-package br.capitalis.Pesquisa;
+package br.capitalis.Pesquisa.dto;
 
-public record DTO_Get_Pesquisa(
+import br.capitalis.Pesquisa.Pesquisa;
+
+public record GetPesquisa(
         Long id,
         String titulo,
         Long id_criador)
 {
-    public DTO_Get_Pesquisa(Pesquisa pesquisa){
+    public GetPesquisa(Pesquisa pesquisa){
         this(pesquisa.getId(), pesquisa.getTitulo(), pesquisa.getId_criador());
     }
 

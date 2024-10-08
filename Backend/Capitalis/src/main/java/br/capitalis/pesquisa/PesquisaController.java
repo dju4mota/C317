@@ -1,6 +1,12 @@
 package br.capitalis.Pesquisa;
 
+import br.capitalis.Pesquisa.dto.GetPesquisa;
+import br.capitalis.Pesquisa.dto.PostPesquisa;
+import br.capitalis.Pesquisa.dto.PutPesquisa;
 import br.capitalis.Pesquisa.pergunta.*;
+import br.capitalis.Pesquisa.pergunta.dto.GetPergunta;
+import br.capitalis.Pesquisa.pergunta.dto.PostPergunta;
+import br.capitalis.Pesquisa.pergunta.dto.PutPergunta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +29,14 @@ public class PesquisaController {
 
     @PostMapping
     @Transactional
-    public String criarPesquisa(@RequestBody DTO_Post_Pesquisa dto_pesquisa) {
+    public String criarPesquisa(@RequestBody PostPesquisa dto_pesquisa) {
         pesquisaRepository.save(new Pesquisa(dto_pesquisa));
         return "Pesquisa criada";
     }
 
     @PostMapping("/{id_pesquisa}/pergunta")
     @Transactional
-    public String adicionarPergunta(@PathVariable Long id_pesquisa, @RequestBody DTO_Post_Pergunta dto_pergunta) {
+    public String adicionarPergunta(@PathVariable Long id_pesquisa, @RequestBody PostPergunta dto_pergunta) {
 
         Optional<Pesquisa> opt = pesquisaRepository.findById(id_pesquisa);
 
@@ -48,39 +54,39 @@ public class PesquisaController {
 
     // todas as pesquisas - TODO page
     @GetMapping
-    public Stream<DTO_Get_Pesquisa> getTodasPesquisas() {
-        return pesquisaRepository.findAll().stream().map(DTO_Get_Pesquisa::new);
+    public Stream<GetPesquisa> getTodasPesquisas() {
+        return pesquisaRepository.findAll().stream().map(GetPesquisa::new);
     }
 
     // 1 pesquisa por id
     @GetMapping("/{id}")
-    public DTO_Get_Pesquisa getPesquisaPorId(@PathVariable Long id) {
+    public GetPesquisa getPesquisaPorId(@PathVariable Long id) {
         Optional<Pesquisa> pesquisa = pesquisaRepository.findById(id);
-        return pesquisa.map(DTO_Get_Pesquisa::new).orElse(null);
+        return pesquisa.map(GetPesquisa::new).orElse(null);
     }
 
     // todas as perguntas de 1 pesquisa - TODO page
     @GetMapping("/{id}/perguntas")
-    public Stream<DTO_Get_Pergunta> getPerguntas(@PathVariable Long id) {
+    public Stream<GetPergunta> getPerguntas(@PathVariable Long id) {
         Optional<Pesquisa> pesquisa = pesquisaRepository.findById(id);
         if(pesquisa.isPresent()) {
             Pesquisa pesq = pesquisa.get();
-            return pesq.getPerguntas().stream().map(DTO_Get_Pergunta::new);
+            return pesq.getPerguntas().stream().map(GetPergunta::new);
         }
         return null;
     }
 
     // todas as perguntas - TODO page
     @GetMapping("/perguntas")
-    public Stream<DTO_Get_Pergunta> getTodasPerguntas() {
-        return perguntaRepository.findAll().stream().map(DTO_Get_Pergunta::new);
+    public Stream<GetPergunta> getTodasPerguntas() {
+        return perguntaRepository.findAll().stream().map(GetPergunta::new);
     }
 
     // 1 pergunta por ID
     @GetMapping("/pergunta/{id}")
-    public DTO_Get_Pergunta getPerguntaPorId(@PathVariable Long id) {
+    public GetPergunta getPerguntaPorId(@PathVariable Long id) {
         Optional<Pergunta> pergunta = perguntaRepository.findById(id);
-        return pergunta.map(DTO_Get_Pergunta::new).orElse(null);
+        return pergunta.map(GetPergunta::new).orElse(null);
     }
 
 
@@ -89,7 +95,7 @@ public class PesquisaController {
     // update pesquisa
     @PutMapping()
     @Transactional
-    public void atualizaPesquisa(@RequestBody DTO_Put_Pesquisa dtoPutPesquisa) {
+    public void atualizaPesquisa(@RequestBody PutPesquisa dtoPutPesquisa) {
         Pesquisa pesquisa = pesquisaRepository.getReferenceById(dtoPutPesquisa.id());
         pesquisa.atualizarDados(dtoPutPesquisa);
     }
@@ -97,7 +103,7 @@ public class PesquisaController {
     // update pergunta
     @PutMapping()
     @Transactional
-    public void atualizaPergunta(@RequestBody DTO_Put_Pergunta dtoPutPergunta) {
+    public void atualizaPergunta(@RequestBody PutPergunta dtoPutPergunta) {
         Pergunta pergunta  = perguntaRepository.getReferenceById(dtoPutPergunta.id_pergunta());
         pergunta.atualizarDados(dtoPutPergunta);
     }

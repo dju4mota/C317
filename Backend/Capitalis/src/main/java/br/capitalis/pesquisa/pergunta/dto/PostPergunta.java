@@ -1,8 +1,8 @@
-package br.capitalis.Pesquisa.pergunta;
+package br.capitalis.Pesquisa.pergunta.dto;
 
 import br.capitalis.resultado.resposta.TipoDeResposta;
 
-public record DTO_Post_Pergunta(
+public record PostPergunta(
          String titulo,
          String descricao,
          TipoDeResposta tipoDeResposta

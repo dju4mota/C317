@@ -1,6 +1,8 @@
 package br.capitalis.Pesquisa.pergunta;
 
 import br.capitalis.Pesquisa.Pesquisa;
+import br.capitalis.Pesquisa.pergunta.dto.PostPergunta;
+import br.capitalis.Pesquisa.pergunta.dto.PutPergunta;
 import br.capitalis.resultado.resposta.TipoDeResposta;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -33,7 +35,7 @@ public class Pergunta {
         this.tipoDeResposta = tipoDeResposta;
     }
 
-    public Pergunta(DTO_Post_Pergunta dtoPostPergunta, Pesquisa pesquisa) {
+    public Pergunta(PostPergunta dtoPostPergunta, Pesquisa pesquisa) {
         this.descricao = dtoPostPergunta.descricao();
         this.tipoDeResposta = dtoPostPergunta.tipoDeResposta();
         this.titulo = dtoPostPergunta.titulo();
@@ -45,7 +47,7 @@ public class Pergunta {
 
     }
 
-    public void atualizarDados(DTO_Put_Pergunta dadosPergunta) {
+    public void atualizarDados(PutPergunta dadosPergunta) {
         if(dadosPergunta.descricao()!= null) {
             this.descricao = dadosPergunta.descricao();
         }
