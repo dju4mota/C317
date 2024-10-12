@@ -33,7 +33,7 @@
   .login-left {
     width: 50%;
     height: 100%;
-    background-color: #51539D;
+    background-color: #5356ad;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -41,13 +41,10 @@
     color: white;
   }
   
-  .login-left h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-  
   .login-left p {
-    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 2rem;
   }
   
   .login-right {
@@ -57,6 +54,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 1.5rem;
+  }
+
+  .login-right h1{
+    font-size: 3.5rem;
+
   }
   
   .login-form {
@@ -70,8 +73,9 @@
   
   .login-form h1 {
     color: #252884;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
+    
   }
   
   .input-group {

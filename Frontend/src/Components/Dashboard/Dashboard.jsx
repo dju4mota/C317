@@ -1,23 +1,21 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { FaBell, FaSearch, FaFileAlt, FaChartPie, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { useNavigate, Link, Outlet } from 'react-router-dom';
+import { FaSearch, FaFileAlt, FaChartPie, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import './Dashboard.css';
 
 export default function Dashboard() {
-  const [activeItem, setActiveItem] = useState('visao-geral');
+  const [activeItem, setActiveItem] = useState('visao-geral'); // Use um valor padrão que corresponda à sua rota
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Aqui você normalmente faria o logout do usuário (ex: limpar o token de autenticação)
-    navigate('/');
+    navigate('/'); // Navega para a página inicial
   };
 
   const menuItems = [
-    { name: 'Avisos', icon: FaBell, route: '/avisos' },
-    { name: 'Pesquisas', icon: FaSearch, route: '/pesquisas' },
-    { name: 'Respostas', icon: FaFileAlt, route: '/respostas' },
-    { name: 'Visão Geral', icon: FaChartPie, route: '/visao-geral' },
-    { name: 'Configurações', icon: FaCog, route: '/configuracoes' },
+    { name: 'Visão Geral', icon: FaChartPie, route: 'visao-geral' }, // Não use a barra inicial
+    { name: 'Pesquisas', icon: FaSearch, route: 'pesquisas' },
+    { name: 'Respostas', icon: FaFileAlt, route: 'respostas' },
+    { name: 'Configurações', icon: FaCog, route: 'configuracoes' },
   ];
 
   return (
@@ -27,9 +25,9 @@ export default function Dashboard() {
           {menuItems.map((item) => (
             <Link
               key={item.name}
-              to={item.route}
-              className={activeItem === item.route.slice(1) ? 'active' : ''}
-              onClick={() => setActiveItem(item.route.slice(1))}
+              to={item.route} // Mude para não ter barra inicial
+              className={activeItem === item.route ? 'active' : ''}
+              onClick={() => setActiveItem(item.route)}
             >
               <item.icon />
               {item.name}
@@ -41,11 +39,10 @@ export default function Dashboard() {
           </button>
         </nav>
       </aside>
+
       <main className="main-content">
         <div className="content-card">
-          <h1>Bem-vindo ao Dashboard</h1>
-          <p>Você fez login com sucesso.</p>
-          <p>Conteúdo do {activeItem} será exibido aqui.</p>
+          <Outlet /> {/* Renderiza o componente da rota ativa */}
         </div>
       </main>
     </div>

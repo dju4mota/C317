@@ -2,6 +2,8 @@ import { FaUser, FaLock } from 'react-icons/fa';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import logo from '../../assets/logo.svg';
+
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -12,7 +14,7 @@ const Login = () => {
         event.preventDefault();
         if (username && password) {
             // Redireciona para a página de dashboard após o login bem-sucedido
-            navigate('/dashboard');
+            navigate('/dashboard/visao-geral');
         } else {
             alert("Por favor, preencha todos os campos.");
         }
@@ -21,7 +23,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-left">
-        <h1>Captalis</h1>
+        <img src={logo} alt="Logo da Captalis" />
         <p>Metrificando felicidade</p>
       </div>
       <div className="login-right">
