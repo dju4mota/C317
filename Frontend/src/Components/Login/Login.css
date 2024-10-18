@@ -40,11 +40,15 @@
     align-items: center;
     color: white;
   }
+
+  .login-left img {
+    height: 200px;
+  }
   
   .login-left p {
     margin-bottom: 1.5rem;
     margin-top: 1.5rem;
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   
   .login-right {
@@ -58,13 +62,14 @@
   }
 
   .login-right h1{
-    font-size: 3.5rem;
+    font-size: 3rem;
 
   }
   
   .login-form {
     width: 80%;
     max-width: 400px;
+    height: 475px;
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
@@ -88,7 +93,7 @@
     padding: 10px 40px 10px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
   
   .input-group .icon {
@@ -113,12 +118,13 @@
   
   button {
     width: 100%;
+    height: 3rem;
     padding: 10px;
     background-color: #252884;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 1.5rem;
     cursor: pointer;
     transition: background-color 0.3s;
   }

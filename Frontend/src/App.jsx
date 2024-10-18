@@ -2,10 +2,13 @@ import { BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-do
 import './App.css';
 import Login from './Components/Login/Login';
 import Dashboard from './Components/Dashboard/Dashboard';
-import Pesquisa from './Components/Pesquisas/Pesquisa';
+import MinhasPesquisas from './Components/MinhasPesquisas/MinhasPesquisas';
 import VisaoGeral from './Components/VisaoGeral/VisaoGeral';
-import Respostas from './Components/Respostas/Respostas';
+import Relatorios from './Components/Relatorios/Relatorios';
 import Configuracoes from './Components/Configuracoes/Configuracoes';
+import GerenciarPesquisas from './Components/GerenciarPesquisas/GerenciarPesquisas'
+import Usuarios from './Components/Usuarios/Usuarios'
+import Ajuda from './Components/Ajuda/Ajuda';
 
 function App() {
     return (
@@ -17,9 +20,12 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />}>
                         {/* Defina as rotas aninhadas aqui */}
                         <Route path="visao-geral" element={<VisaoGeral />} />
-                        <Route path="pesquisas" element={<Pesquisa />} />
-                        <Route path="respostas" element={<Respostas />} />
+                        <Route path="minhaspesquisas" element={<MinhasPesquisas />} />
+                        <Route path="relatorios" element={<Relatorios />} />
                         <Route path="configuracoes" element={<Configuracoes />} />
+                        <Route path="gerenciar-pesquisas" element={<GerenciarPesquisas />} />
+                        <Route path="usuarios" element={<Usuarios />} />
+                        <Route path="ajuda" element={<Ajuda />} />
                         {/* Adicione outras rotas aqui, se necessário */}
                     </Route>
 

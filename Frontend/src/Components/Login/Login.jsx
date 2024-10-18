@@ -24,7 +24,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-left">
         <img src={logo} alt="Logo da Captalis" />
-        <p>Metrificando felicidade</p>
+        <p>Metrificando felicidade.</p>
       </div>
       <div className="login-right">
         <form onSubmit={handleSubmit} className="login-form">
