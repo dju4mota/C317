@@ -2,13 +2,19 @@ import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import "./Modal.css";
 
-const Modal = ({ pesquisa, onClose, respostas, onRespostasChange }) => {
+const Modal = ({ pesquisa, onClose, respostas, onRespostasChange, finalizada, onFinalizar }) => {
   const handleRespostaChange = useCallback((perguntaIndex, resposta) => {
-    onRespostasChange(pesquisa.id, {
-      ...respostas,
-      [perguntaIndex]: resposta
-    });
-  }, [pesquisa.id, respostas, onRespostasChange]);
+    if (!finalizada) {
+      onRespostasChange(pesquisa.id, {
+        ...respostas,
+        [perguntaIndex]: resposta
+      });
+    }
+  }, [pesquisa.id, respostas, onRespostasChange, finalizada]);
+
+  const handleFinalizar = () => {
+    onFinalizar(pesquisa.id);
+  };
 
   return (
     <div className="modal-overlay">
@@ -30,6 +36,7 @@ const Modal = ({ pesquisa, onClose, respostas, onRespostasChange }) => {
                       value={alternativa}
                       checked={respostas[perguntaIndex] === alternativa}
                       onChange={() => handleRespostaChange(perguntaIndex, alternativa)}
+                      disabled={finalizada}
                     />
                     {alternativa}
                   </label>
@@ -39,7 +46,14 @@ const Modal = ({ pesquisa, onClose, respostas, onRespostasChange }) => {
           ))}
         </div>
         <div className="modal-footer">
-          <button onClick={onClose}>Fechar</button>
+          {!finalizada && (
+            <button onClick={handleFinalizar} className="finalizar-btn">
+              Enviar Respostas
+            </button>
+          )}
+          <button onClick={onClose} className="fechar-btn">
+            {finalizada ? "Fechar" : "Cancelar"}
+          </button>
         </div>
       </div>
     </div>
@@ -58,7 +72,9 @@ Modal.propTypes = {
   }).isRequired,
   onClose: PropTypes.func.isRequired,
   respostas: PropTypes.object.isRequired,
-  onRespostasChange: PropTypes.func.isRequired
+  onRespostasChange: PropTypes.func.isRequired,
+  finalizada: PropTypes.bool.isRequired,
+  onFinalizar: PropTypes.func.isRequired
 };
 
 export default Modal;

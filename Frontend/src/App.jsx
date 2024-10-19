@@ -5,7 +5,6 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import MinhasPesquisas from './Components/MinhasPesquisas/MinhasPesquisas';
 import VisaoGeral from './Components/VisaoGeral/VisaoGeral';
 import Relatorios from './Components/Relatorios/Relatorios';
-import Configuracoes from './Components/Configuracoes/Configuracoes';
 import GerenciarPesquisas from './Components/GerenciarPesquisas/GerenciarPesquisas'
 import Usuarios from './Components/Usuarios/Usuarios'
 import Ajuda from './Components/Ajuda/Ajuda';
@@ -22,7 +21,6 @@ function App() {
                         <Route path="visao-geral" element={<VisaoGeral />} />
                         <Route path="minhaspesquisas" element={<MinhasPesquisas />} />
                         <Route path="relatorios" element={<Relatorios />} />
-                        <Route path="configuracoes" element={<Configuracoes />} />
                         <Route path="gerenciar-pesquisas" element={<GerenciarPesquisas />} />
                         <Route path="usuarios" element={<Usuarios />} />
                         <Route path="ajuda" element={<Ajuda />} />

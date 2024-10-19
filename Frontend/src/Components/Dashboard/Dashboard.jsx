@@ -4,8 +4,7 @@ import { FaChartPie,
   FaClipboardList, 
   FaTasks, 
   FaChartBar, 
-  FaUsers, 
-  FaCog, 
+  FaUsers,  
   FaQuestionCircle,
    FaSignOutAlt } from 'react-icons/fa';
 import './Dashboard.css';
@@ -24,7 +23,6 @@ export default function Dashboard() {
     { name: 'Gerenciar Pesquisas', icon: FaTasks, route: 'gerenciar-pesquisas' },
     { name: 'Relatórios', icon: FaChartBar, route: 'relatorios' },
     { name: 'Usuários', icon: FaUsers, route: 'usuarios' },
-    { name: 'Configurações', icon: FaCog, route: 'configuracoes' },
     { name: 'Ajuda', icon: FaQuestionCircle, route: 'ajuda' },
   ];
 

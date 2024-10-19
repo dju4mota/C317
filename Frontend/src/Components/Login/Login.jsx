@@ -14,7 +14,7 @@ const Login = () => {
         event.preventDefault();
         if (username && password) {
             // Redireciona para a página de dashboard após o login bem-sucedido
-            navigate('/dashboard/visao-geral');
+            navigate("/dashboard/visao-geral");
         } else {
             alert("Por favor, preencha todos os campos.");
         }
@@ -32,7 +32,8 @@ const Login = () => {
             <div className="input-group">
                 <input 
                     type="email" 
-                    placeholder='E-mail'
+                    placeholder="E-mail"
+                    name="email" 
                     required
                     onChange={(e) => setUsername(e.target.value)}/>
                 <FaUser className="icon" />
@@ -40,7 +41,8 @@ const Login = () => {
             <div className="input-group">
                 <input 
                     type="password" 
-                    placeholder='Senha'
+                    placeholder="Senha"
+                    name="password" 
                     required
                     onChange={(e) => setPassword(e.target.value)}/>
                 <FaLock className="icon" />
@@ -53,7 +55,7 @@ const Login = () => {
                 </label>
                 <a href="#">Esqueceu a senha?</a>
             </div>
-            <button>Entrar</button>
+            <button type="submit">Entrar</button>
 
             <div className="signup-link">
                 <p>

@@ -5,9 +5,9 @@ import "./GerenciarPesquisas.css";
 
 const GerenciarPesquisas = () => {
   const [pesquisas, setPesquisas] = useState([
-    { id: 1, titulo: "Pesquisa 1", descricao: "Descrição da Pesquisa 1" },
-    { id: 2, titulo: "Pesquisa 2", descricao: "Descrição da Pesquisa 2" },
-    { id: 3, titulo: "Pesquisa 3", descricao: "Descrição da Pesquisa 3" },
+    { id: 4, titulo: "Satisfação do Cliente", descricao: "Avaliação da satisfação dos clientes com nossos serviços", perguntas: [{ pergunta: "Como você avalia nosso atendimento?", alternativas: ["Excelente", "Bom", "Regular", "Ruim"] },{ pergunta: "O que você achou da qualidade do produto?", alternativas: ["Muito boa", "Boa", "Regular", "Ruim"] }] },
+    { id: 5, titulo: "Feedback do Produto", descricao: "Coleta de opiniões sobre nosso novo produto", perguntas: [{ pergunta: "O que você achou da qualidade do produto?", alternativas: ["Muito boa", "Boa", "Regular", "Ruim"] }] },
+    { id: 6, titulo: "Pesquisa de Mercado", descricao: "Análise das tendências de mercado em nossa área", perguntas: [{ pergunta: "Qual característica você mais valoriza em um produto?", alternativas: ["Preço", "Qualidade", "Inovação", "Sustentabilidade"] }] },
   ]);
   const [modalAberto, setModalAberto] = useState(false);
   const [pesquisaAtual, setPesquisaAtual] = useState(null);

@@ -9,6 +9,7 @@ const MinhasPesquisas = () => {
   const [modalAberto, setModalAberto] = useState(false);
   const [pesquisaAtualId, setPesquisaAtualId] = useState(null);
   const [respostas, setRespostas] = useState({});
+  const [pesquisasFinalizadas, setPesquisasFinalizadas] = useState({});
 
   useEffect(() => {
     const fetchPesquisas = async () => {
@@ -49,6 +50,13 @@ const MinhasPesquisas = () => {
     }));
   }, []);
 
+  const finalizarPesquisa = useCallback((pesquisaId) => {
+    setPesquisasFinalizadas(prev => ({
+      ...prev,
+      [pesquisaId]: true
+    }));
+  }, []);
+
   if (isLoading) {
     return (
       <div className="minhas-pesquisas-container">
@@ -75,9 +83,12 @@ const MinhasPesquisas = () => {
                   <ClipboardList size={16} />
                   <span>{pesquisa.perguntas.length} pergunta(s)</span>
                 </div>
+                <div className={`pesquisa-status ${pesquisasFinalizadas[pesquisa.id] ? 'finalizada' : 'em-andamento'}`}>
+                  {pesquisasFinalizadas[pesquisa.id] ? 'Finalizada' : 'Em andamento'}
+                </div>
               </div>
               <button className="ver-detalhes-btn" onClick={() => abrirModal(pesquisa.id)}>
-                Ver detalhes
+                {pesquisasFinalizadas[pesquisa.id] ? "Ver respostas" : "Responder"}
               </button>
             </div>
           ))}
@@ -90,6 +101,8 @@ const MinhasPesquisas = () => {
           onClose={fecharModal} 
           respostas={respostas[pesquisaAtual.id] || {}}
           onRespostasChange={atualizarRespostas}
+          finalizada={pesquisasFinalizadas[pesquisaAtual.id]}
+          onFinalizar={finalizarPesquisa}
         />
       )}
     </div>

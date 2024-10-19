@@ -198,6 +198,7 @@
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    flex-grow: 1;
   }
   
   .alternativa-container {
@@ -215,6 +216,8 @@
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    margin-right: 32px;
+    margin-left: 32px;
   }
   
   .btn-adicionar-alternativa,
@@ -276,17 +279,3 @@
     color: #ff0000;
   }
   
-  .alternativa-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .alternativa-input {
-    flex-grow: 1;
-    margin-right: 16px;
-  }
-  
-  .pergunta-input {
-    flex-grow: 1;
-  }

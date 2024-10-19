@@ -46,12 +46,6 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
     setFormData({ ...formData, perguntas: novasPerguntas });
   };
 
-  const handleCorretaChange = (perguntaIndex, alternativaIndex) => {
-    const novasPerguntas = [...formData.perguntas];
-    novasPerguntas[perguntaIndex].correta = alternativaIndex;
-    setFormData({ ...formData, perguntas: novasPerguntas });
-  };
-
   const adicionarAlternativa = (perguntaIndex) => {
     const novasPerguntas = [...formData.perguntas];
     novasPerguntas[perguntaIndex].alternativas.push('');
@@ -129,13 +123,6 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
                 </div>
                 {pergunta.alternativas.map((alt, altIndex) => (
                   <div key={altIndex} className="alternativa-container">
-                    <input
-                      type="radio"
-                      id={`pergunta-${perguntaIndex}-alt-${altIndex}`}
-                      name={`pergunta-${perguntaIndex}`}
-                      checked={pergunta.correta === altIndex}
-                      onChange={() => handleCorretaChange(perguntaIndex, altIndex)}
-                    />
                     <input
                       type="text"
                       value={alt}

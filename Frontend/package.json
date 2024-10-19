@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
+    "axios": "^1.7.7",
     "chart.js": "^4.4.5",
     "chartjs-plugin-datalabels": "^2.2.0",
     "lucide-react": "^0.452.0",
