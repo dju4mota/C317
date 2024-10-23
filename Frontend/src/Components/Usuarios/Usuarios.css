@@ -1,0 +1,12 @@
+.usuario-container {
+    display: block;
+}
+
+.usuario-container div{
+    padding: 10px;
+}
+
+.usuario-container label {
+    padding-right: 10px;
+
+}

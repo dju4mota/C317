@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link, Outlet } from 'react-router-dom';
-import { FaSearch, FaFileAlt, FaChartPie, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaChartPie, 
+  FaClipboardList, 
+  FaTasks, 
+  FaChartBar, 
+  FaUsers,  
+  FaQuestionCircle,
+  FaSignOutAlt } from 'react-icons/fa';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -12,10 +18,12 @@ export default function Dashboard() {
   };
 
   const menuItems = [
-    { name: 'Visão Geral', icon: FaChartPie, route: 'visao-geral' }, // Não use a barra inicial
-    { name: 'Pesquisas', icon: FaSearch, route: 'pesquisas' },
-    { name: 'Respostas', icon: FaFileAlt, route: 'respostas' },
-    { name: 'Configurações', icon: FaCog, route: 'configuracoes' },
+    { name: 'Visão Geral', icon: FaChartPie, route: 'visao-geral' },
+    { name: 'Minhas Pesquisas', icon: FaClipboardList, route: 'minhaspesquisas' },
+    { name: 'Gerenciar Pesquisas', icon: FaTasks, route: 'gerenciar-pesquisas' },
+    { name: 'Relatórios', icon: FaChartBar, route: 'relatorios' },
+    { name: 'Usuários', icon: FaUsers, route: 'usuarios' },
+    { name: 'Ajuda', icon: FaQuestionCircle, route: 'ajuda' },
   ];
 
   return (

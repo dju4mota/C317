@@ -26,7 +26,7 @@
   
   /* Menu lateral */
   .sidebar {
-    width: 250px;
+    width: 300px;
     height: 100vh;   /* Certifique-se que a sidebar tenha a altura total */
     background-color: #252782;
     color: white;
@@ -42,27 +42,28 @@
   .sidebar a {
     display: flex;
     align-items: center;
-    padding: 10px 10px;
+    padding: 12px 10px;
     color: white;
     text-decoration: none;
     transition: background-color 0.3s;
     border: none;
     background: none;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 24px;
+    text-align: left;
   }
 
   .sidebar button {
     display: flex;
     align-items: center;
-    padding: 10px 11px;
+    padding: 12px 11px;
     color: white;
     text-decoration: none;
     transition: background-color 0.3s;
     border: none;
     background: none;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .sidebar a svg, .sidebar button svg {

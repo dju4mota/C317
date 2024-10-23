@@ -1,0 +1,88 @@
+{
+  "pesquisas": [
+    {
+      "id": "9a3f",
+      "titulo": "Pesquisa 1",
+      "descricao": "1",
+      "perguntas": [
+        {
+          "id": 1,
+          "descricao": "2+2",
+          "alternativaEscolhida": 1,
+          "alternativas": [
+            {
+              "id": 1,
+              "texto": "4"
+            },
+            {
+              "id": 2,
+              "texto": "3"
+            }
+          ]
+        }
+      ],
+      "finalizada": true
+    },
+    {
+      "id": "a14d",
+      "titulo": "2",
+      "descricao": "2",
+      "perguntas": [
+        {
+          "id": 1,
+          "descricao": "3/3",
+          "alternativaEscolhida": null,
+          "alternativas": [
+            {
+              "id": 1,
+              "texto": "1"
+            },
+            {
+              "id": 2,
+              "texto": "2"
+            },
+            {
+              "id": 3,
+              "texto": "3"
+            },
+            {
+              "id": 4,
+              "texto": "4"
+            },
+            {
+              "id": 5,
+              "texto": "5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "54bc",
+      "titulo": "Pesquisa 3",
+      "descricao": "3",
+      "perguntas": [
+        {
+          "id": 1,
+          "descricao": "2+2",
+          "alternativaEscolhida": 2,
+          "alternativas": [
+            {
+              "id": 1,
+              "texto": "2"
+            },
+            {
+              "id": 2,
+              "texto": "4"
+            },
+            {
+              "id": 3,
+              "texto": "6"
+            }
+          ]
+        }
+      ],
+      "finalizada": true
+    }
+  ]
+}
