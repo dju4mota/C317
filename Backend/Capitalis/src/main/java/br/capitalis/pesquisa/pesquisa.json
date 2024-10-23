@@ -1,0 +1,27 @@
+{
+  "Pesquisa": {
+    "id": 120,
+    "titulo": "Satisfação dos Usuários com o Produto X",
+    "id_criador": "345",
+    "perguntas": [
+      {
+        "id_pergunta": "001",
+        "titulo": "Como você avalia a qualidade do produto?",
+        "descricao": "Avalie a qualidade geral do produto com base na sua experiência.",
+        "alternativas": ["Excelente", "Boa", "Regular", "Ruim"]
+      },
+      {
+        "id_pergunta": "002",
+        "titulo": "Você recomendaria o produto para outras pessoas?",
+        "descricao": "Baseado na sua experiência, você recomendaria o produto para amigos ou familiares?",
+        "alternativas": ["Sim", "Não"]
+      },
+      {
+        "id_pergunta": "003",
+        "titulo": "Quais funcionalidades você mais utiliza no produto?",
+        "descricao": "Selecione as funcionalidades que você usa com mais frequência.",
+        "alternativas": ["Funcionalidade A", "Funcionalidade B", "Funcionalidade C"]
+      }
+    ]
+  }
+}

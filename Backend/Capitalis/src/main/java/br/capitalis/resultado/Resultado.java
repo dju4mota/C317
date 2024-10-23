@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.ArrayList;
 @Entity
 @Getter
 @Setter
@@ -20,8 +20,9 @@ public class Resultado {
     // TODO - como linkar ids
     private Long idPesquisa;
     private Long idUsuario;
+    private boolean finalizada = false;
     @OneToMany(mappedBy = "resultado")
-    private List<Resposta>  respostas;
+    private ArrayList<Resposta> respostas;
 
     public Resultado(PostResultado resultado) {
         this.idPesquisa = resultado.idPesquisa();

@@ -1,0 +1,22 @@
+{
+  "Resultado": {
+    "id": 123,
+    "id_pesquisa": 120,
+    "id_usuario": 32241,
+    "finalizada": true,
+    "respostas": [
+      {
+        "id_pergunta": 1,
+        "alternativa_escolhida": 0
+      },
+      {
+        "id_pergunta": 2,
+        "alternativa_escolhida": 1
+      },
+      {
+        "id_pergunta": 3,
+        "alternativa_escolhida": 2
+      }
+    ]
+  }
+}

@@ -1,8 +1,6 @@
 package br.capitalis.resultado;
 
 
-import br.capitalis.Pesquisa.Pesquisa;
-import br.capitalis.Pesquisa.dto.PostPesquisa;
 import br.capitalis.resultado.dto.PostResultado;
 import br.capitalis.resultado.resposta.RespostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

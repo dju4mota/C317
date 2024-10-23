@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
 @Entity
 @Getter
 @Setter
@@ -22,7 +21,7 @@ public class Pergunta {
     private Long id_pergunta;
     private String titulo;
     private String descricao;
-    private TipoDeResposta tipoDeResposta;
+    private String alternativas;
 
     @ManyToOne
     @JoinColumn(name ="pesquisa_id", nullable = false)
@@ -32,12 +31,10 @@ public class Pergunta {
         this.id_pergunta = id_pergunta;
         this.titulo = titulo;
         this.descricao = descricao;
-        this.tipoDeResposta = tipoDeResposta;
     }
 
     public Pergunta(PostPergunta dtoPostPergunta, Pesquisa pesquisa) {
         this.descricao = dtoPostPergunta.descricao();
-        this.tipoDeResposta = dtoPostPergunta.tipoDeResposta();
         this.titulo = dtoPostPergunta.titulo();
         this.pesquisa = pesquisa;
 
@@ -54,10 +51,8 @@ public class Pergunta {
         if(dadosPergunta.titulo()!= null) {
             this.titulo = dadosPergunta.titulo();
         }
-        if(dadosPergunta.tipoDeResposta()!= null) {
-            this.tipoDeResposta = dadosPergunta.tipoDeResposta();
-        }
     }
+
 
 
 

@@ -15,10 +15,10 @@ public class Resposta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String resposta;
+    private String alternativa_escolhida;
     @ManyToOne
     @JoinColumn(name ="restuladoId", nullable = false)
-    private Resultado resultado;
+    private Resultado idResultado;
     // TODO - id pergunta ?
 
 }
