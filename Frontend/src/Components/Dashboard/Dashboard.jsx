@@ -6,7 +6,7 @@ import { FaChartPie,
   FaChartBar, 
   FaUsers,  
   FaQuestionCircle,
-   FaSignOutAlt } from 'react-icons/fa';
+  FaSignOutAlt } from 'react-icons/fa';
 import './Dashboard.css';
 
 export default function Dashboard() {

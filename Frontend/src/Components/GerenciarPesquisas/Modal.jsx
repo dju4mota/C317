@@ -7,6 +7,7 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
     id: pesquisa?.id || null,
     titulo: pesquisa?.titulo || '',
     descricao: pesquisa?.descricao || '',
+    finalizada: pesquisa?.finalizada || false,
     perguntas: pesquisa?.perguntas || []
   });
 
@@ -16,6 +17,7 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
         id: pesquisa.id,
         titulo: pesquisa.titulo,
         descricao: pesquisa.descricao,
+        finalizada: pesquisa.finalizada,
         perguntas: pesquisa.perguntas || []
       });
     }
@@ -34,28 +36,38 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
     onSave(formData);
   };
 
-  const handlePerguntaChange = (index, value) => {
+  const handlePerguntaChange = (index, field, value) => {
     const novasPerguntas = [...formData.perguntas];
-    novasPerguntas[index].pergunta = value;
+    novasPerguntas[index][field] = value;
     setFormData({ ...formData, perguntas: novasPerguntas });
   };
 
   const handleAlternativaChange = (perguntaIndex, alternativaIndex, value) => {
     const novasPerguntas = [...formData.perguntas];
-    novasPerguntas[perguntaIndex].alternativas[alternativaIndex] = value;
+    novasPerguntas[perguntaIndex].alternativas[alternativaIndex].texto = value;
     setFormData({ ...formData, perguntas: novasPerguntas });
   };
 
   const adicionarAlternativa = (perguntaIndex) => {
     const novasPerguntas = [...formData.perguntas];
-    novasPerguntas[perguntaIndex].alternativas.push('');
+    const novaAlternativa = {
+      id: novasPerguntas[perguntaIndex].alternativas.length + 1,
+      texto: ''
+    };
+    novasPerguntas[perguntaIndex].alternativas.push(novaAlternativa);
     setFormData({ ...formData, perguntas: novasPerguntas });
   };
 
   const adicionarPergunta = () => {
+    const novaPergunta = {
+      id: formData.perguntas.length + 1,
+      descricao: '',
+      alternativaEscolhida: null,
+      alternativas: []
+    };
     setFormData({
       ...formData,
-      perguntas: [...formData.perguntas, { pergunta: '', alternativas: [''], correta: null }]
+      perguntas: [...formData.perguntas, novaPergunta]
     });
   };
 
@@ -67,11 +79,6 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
   const removerAlternativa = (perguntaIndex, alternativaIndex) => {
     const novasPerguntas = [...formData.perguntas];
     novasPerguntas[perguntaIndex].alternativas = novasPerguntas[perguntaIndex].alternativas.filter((_, index) => index !== alternativaIndex);
-    if (novasPerguntas[perguntaIndex].correta === alternativaIndex) {
-      novasPerguntas[perguntaIndex].correta = null;
-    } else if (novasPerguntas[perguntaIndex].correta > alternativaIndex) {
-      novasPerguntas[perguntaIndex].correta--;
-    }
     setFormData({ ...formData, perguntas: novasPerguntas });
   };
 
@@ -108,8 +115,8 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
                 <div className="pergunta-header">
                   <input
                     type="text"
-                    value={pergunta.pergunta}
-                    onChange={(e) => handlePerguntaChange(perguntaIndex, e.target.value)}
+                    value={pergunta.descricao}
+                    onChange={(e) => handlePerguntaChange(perguntaIndex, "descricao", e.target.value)}
                     placeholder="Digite a pergunta"
                     className="pergunta-input"
                   />
@@ -125,7 +132,7 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
                   <div key={altIndex} className="alternativa-container">
                     <input
                       type="text"
-                      value={alt}
+                      value={alt.texto}
                       onChange={(e) => handleAlternativaChange(perguntaIndex, altIndex, e.target.value)}
                       placeholder="Digite a alternativa"
                       className="alternativa-input"
@@ -171,12 +178,16 @@ Modal.propTypes = {
   pesquisa: PropTypes.shape({
     id: PropTypes.number,
     titulo: PropTypes.string,
-    id_criador: PropTypes.number,
     descricao: PropTypes.string,
+    finalizada: PropTypes.bool,
     perguntas: PropTypes.arrayOf(PropTypes.shape({
-      pergunta: PropTypes.string,
-      alternativas: PropTypes.arrayOf(PropTypes.string),
-      correta: PropTypes.number
+      id: PropTypes.number,
+      descricao: PropTypes.string,
+      alternativaEscolhida: PropTypes.number,
+      alternativas: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        texto: PropTypes.string
+      }))
     }))
   }),
   onClose: PropTypes.func.isRequired,

@@ -3,26 +3,24 @@ import { ClipboardList } from 'lucide-react';
 import Modal from './Modal';
 import "./MinhasPesquisas.css";
 
+const API_URL = 'http://localhost:3000/pesquisas';
+
 const MinhasPesquisas = () => {
   const [pesquisas, setPesquisas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalAberto, setModalAberto] = useState(false);
   const [pesquisaAtualId, setPesquisaAtualId] = useState(null);
-  const [respostas, setRespostas] = useState({});
-  const [pesquisasFinalizadas, setPesquisasFinalizadas] = useState({});
 
   useEffect(() => {
     const fetchPesquisas = async () => {
       setIsLoading(true);
       try {
-        const response = await new Promise(resolve => 
-          setTimeout(() => resolve([
-            { id: 1, titulo: "Satisfação do Cliente", descricao: "Avaliação da satisfação dos clientes com nossos serviços", perguntas: [{ pergunta: "Como você avalia nosso atendimento?", alternativas: ["Excelente", "Bom", "Regular", "Ruim"] },{ pergunta: "O que você achou da qualidade do produto?", alternativas: ["Muito boa", "Boa", "Regular", "Ruim"] }] },
-            { id: 2, titulo: "Feedback do Produto", descricao: "Coleta de opiniões sobre nosso novo produto", perguntas: [{ pergunta: "O que você achou da qualidade do produto?", alternativas: ["Muito boa", "Boa", "Regular", "Ruim"] }] },
-            { id: 3, titulo: "Pesquisa de Mercado", descricao: "Análise das tendências de mercado em nossa área", perguntas: [{ pergunta: "Qual característica você mais valoriza em um produto?", alternativas: ["Preço", "Qualidade", "Inovação", "Sustentabilidade"] }] },
-          ]), 1000)
-        );
-        setPesquisas(response);
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error('Falha ao buscar pesquisas');
+        }
+        const data = await response.json();
+        setPesquisas(data);
       } catch (error) {
         console.error("Erro ao buscar pesquisas:", error);
       } finally {
@@ -43,18 +41,26 @@ const MinhasPesquisas = () => {
     setPesquisaAtualId(null);
   }, []);
 
-  const atualizarRespostas = useCallback((pesquisaId, novasRespostas) => {
-    setRespostas(prevRespostas => ({
-      ...prevRespostas,
-      [pesquisaId]: novasRespostas
-    }));
-  }, []);
+  const atualizarPesquisa = useCallback(async (pesquisaAtualizada) => {
+    try {
+      const response = await fetch(`${API_URL}/${pesquisaAtualizada.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pesquisaAtualizada),
+      });
 
-  const finalizarPesquisa = useCallback((pesquisaId) => {
-    setPesquisasFinalizadas(prev => ({
-      ...prev,
-      [pesquisaId]: true
-    }));
+      if (!response.ok) {
+        throw new Error('Falha ao atualizar pesquisa');
+      }
+
+      setPesquisas(prevPesquisas =>
+        prevPesquisas.map(p => p.id === pesquisaAtualizada.id ? pesquisaAtualizada : p)
+      );
+    } catch (error) {
+      console.error("Erro ao atualizar pesquisa:", error);
+    }
   }, []);
 
   if (isLoading) {
@@ -71,7 +77,7 @@ const MinhasPesquisas = () => {
     <div className="minhas-pesquisas-container">
       <h1>Minhas Pesquisas</h1>
       {pesquisas.length === 0 ? (
-        <p className="no-pesquisas">Você ainda não tem pesquisas criadas.</p>
+        <p className="no-pesquisas">Você ainda não tem pesquisas disponíveis.</p>
       ) : (
         <div>
           {pesquisas.map((pesquisa) => (
@@ -83,12 +89,12 @@ const MinhasPesquisas = () => {
                   <ClipboardList size={16} />
                   <span>{pesquisa.perguntas.length} pergunta(s)</span>
                 </div>
-                <div className={`pesquisa-status ${pesquisasFinalizadas[pesquisa.id] ? 'finalizada' : 'em-andamento'}`}>
-                  {pesquisasFinalizadas[pesquisa.id] ? 'Finalizada' : 'Em andamento'}
+                <div className={`pesquisa-status ${pesquisa.finalizada ? 'finalizada' : 'em-andamento'}`}>
+                  {pesquisa.finalizada ? 'Finalizada' : 'Em andamento'}
                 </div>
               </div>
               <button className="ver-detalhes-btn" onClick={() => abrirModal(pesquisa.id)}>
-                {pesquisasFinalizadas[pesquisa.id] ? "Ver respostas" : "Responder"}
+                {pesquisa.finalizada ? "Ver respostas" : "Responder"}
               </button>
             </div>
           ))}
@@ -99,10 +105,7 @@ const MinhasPesquisas = () => {
         <Modal 
           pesquisa={pesquisaAtual} 
           onClose={fecharModal} 
-          respostas={respostas[pesquisaAtual.id] || {}}
-          onRespostasChange={atualizarRespostas}
-          finalizada={pesquisasFinalizadas[pesquisaAtual.id]}
-          onFinalizar={finalizarPesquisa}
+          onSave={atualizarPesquisa}
         />
       )}
     </div>

@@ -1,23 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BsFillTrashFill, BsFillPencilFill, BsPlusCircle } from "react-icons/bs";
 import Modal from './Modal';
 import "./GerenciarPesquisas.css";
 
+const url = "http://localhost:3000/pesquisas";
+
 const GerenciarPesquisas = () => {
-  const [pesquisas, setPesquisas] = useState([
-    { id: 4, titulo: "Satisfação do Cliente", descricao: "Avaliação da satisfação dos clientes com nossos serviços", perguntas: [{ pergunta: "Como você avalia nosso atendimento?", alternativas: ["Excelente", "Bom", "Regular", "Ruim"] },{ pergunta: "O que você achou da qualidade do produto?", alternativas: ["Muito boa", "Boa", "Regular", "Ruim"] }] },
-    { id: 5, titulo: "Feedback do Produto", descricao: "Coleta de opiniões sobre nosso novo produto", perguntas: [{ pergunta: "O que você achou da qualidade do produto?", alternativas: ["Muito boa", "Boa", "Regular", "Ruim"] }] },
-    { id: 6, titulo: "Pesquisa de Mercado", descricao: "Análise das tendências de mercado em nossa área", perguntas: [{ pergunta: "Qual característica você mais valoriza em um produto?", alternativas: ["Preço", "Qualidade", "Inovação", "Sustentabilidade"] }] },
-  ]);
+  const [pesquisas, setPesquisas] = useState([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [pesquisaAtual, setPesquisaAtual] = useState(null);
 
-  const abrirModal = (pesquisa = null) => {
-    if (pesquisa) {
-      setPesquisaAtual(pesquisa); // Verifica se a pesquisa é válida
-    } else {
-      setPesquisaAtual({ titulo: '', descricao: '', perguntas: [] });
+  useEffect(() => {
+    fetchPesquisas();
+  }, []);
+
+  const fetchPesquisas = async () => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Falha ao buscar pesquisas');
+      }
+      const data = await response.json();
+      setPesquisas(data);
+    } catch (error) {
+      console.error('Erro ao buscar pesquisas:', error);
     }
+  };
+
+  const abrirModal = (pesquisa = null) => {
+    setPesquisaAtual(pesquisa || { titulo: '', descricao: '', perguntas: [] });
     setModalAberto(true);
   };
 
@@ -26,17 +37,44 @@ const GerenciarPesquisas = () => {
     setPesquisaAtual(null);
   };
 
-  const salvarPesquisa = (pesquisa) => {
-    if (pesquisa.id) {
-      setPesquisas(pesquisas.map(p => p.id === pesquisa.id ? pesquisa : p));
-    } else {
-      setPesquisas([...pesquisas, { ...pesquisa, id: Date.now() }]);
+  const salvarPesquisa = async (pesquisa) => {
+    try {
+      const method = pesquisa.id ? 'PUT' : 'POST';
+      const urlWithId = pesquisa.id ? `${url}/${pesquisa.id}` : url;
+      
+      const response = await fetch(urlWithId, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pesquisa),
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao salvar pesquisa');
+      }
+
+      await fetchPesquisas(); // Recarrega a lista de pesquisas
+      fecharModal();
+    } catch (error) {
+      console.error('Erro ao salvar pesquisa:', error);
     }
-    fecharModal();
   };
 
-  const excluirPesquisa = (id) => {
-    setPesquisas(pesquisas.filter(p => p.id !== id));
+  const excluirPesquisa = async (id) => {
+    try {
+      const response = await fetch(`${url}/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao excluir pesquisa');
+      }
+
+      await fetchPesquisas(); // Recarrega a lista de pesquisas
+    } catch (error) {
+      console.error('Erro ao excluir pesquisa:', error);
+    }
   };
 
   return (

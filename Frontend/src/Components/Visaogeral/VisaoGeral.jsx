@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -6,70 +7,100 @@ import "./VisaoGeral.css"
 // Registrar os componentes e o plugin no ChartJS
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-// Exemplo de dados dinâmicos com base no número de pesquisas por estado
-const pesquisasPorEstado = {
-  naoRespondida: 5,
-  emProgresso: 3,
-  respondida: 7,
-};
+const API_URL = 'http://localhost:3000/pesquisas';
 
-const data = {
-  labels: ['Não Respondida', 'Em Progresso', 'Respondida'],
-  datasets: [
-    {
-      label: 'Estado das Pesquisas',
-      data: [
-        pesquisasPorEstado.naoRespondida, 
-        pesquisasPorEstado.emProgresso, 
-        pesquisasPorEstado.respondida
-      ],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.4)',   // Cor para 'Não Respondida'
-        'rgba(54, 162, 235, 0.4)',   // Cor para 'Em Progresso'
-        'rgba(75, 192, 192, 0.4)',   // Cor para 'Respondida'
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(75, 192, 192, 1)',
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
+const VisaoGeral = () => {
+  const [pesquisasPorEstado, setPesquisasPorEstado] = useState({
+    naoRespondida: 0,
+    respondida: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
-      labels: {
+  useEffect(() => {
+    const fetchPesquisas = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error('Falha ao buscar pesquisas');
+        }
+        const pesquisas = await response.json();
+        
+        const estados = pesquisas.reduce((acc, pesquisa) => {
+          if (pesquisa.finalizada) {
+            acc.respondida += 1;
+          } else {
+            acc.naoRespondida += 1;
+          }
+          return acc;
+        }, { naoRespondida: 0, respondida: 0 });
+
+        setPesquisasPorEstado(estados);
+      } catch (error) {
+        console.error("Erro ao buscar pesquisas:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPesquisas();
+  }, []);
+
+  const data = {
+    labels: ['Não Respondida', 'Respondida'],
+    datasets: [
+      {
+        label: 'Estado das Pesquisas',
+        data: [
+          pesquisasPorEstado.naoRespondida, 
+          pesquisasPorEstado.respondida
+        ],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.4)',   // Cor para 'Não Respondida'
+          'rgba(75, 192, 192, 0.4)',   // Cor para 'Respondida'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#000',
+          font: {
+            size: 24,
+            weight: 500
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+      },
+      datalabels: {
         color: '#000',
         font: {
-          size: 24, // Aumenta o tamanho da fonte das labels da legenda
-          weight: 500
+          size: 24,
+          weight: 'bold',
+        },
+        formatter: (value) => {
+          return value;
         },
       },
     },
-    tooltip: {
-      enabled: true,
-    },
-    datalabels: {
-      // Configurações para os rótulos de dados
-      color: '#000',           // Cor do texto
-      font: {
-        size: 24,              // Tamanho da fonte das labels no gráfico
-        weight: 'bold',        // Negrito
-      },
-      formatter: (value) => {
-        return value;
-      },
-    },
-  },
-};
+  };
 
+  if (isLoading) {
+    return <div className="loading">Carregando...</div>;
+  }
 
-const VisaoGeral = () => {
   return (
     <div className="visao-geral-container">
       <h1>Visão Geral</h1>
@@ -80,7 +111,11 @@ const VisaoGeral = () => {
         </div>
         <div className="avisos">
           <h2>Avisos</h2>
-          <p>Você não possui nenhum aviso</p>
+          {pesquisasPorEstado.naoRespondida > 0 ? (
+            <p>Você tem {pesquisasPorEstado.naoRespondida} pesquisa(s) não respondida(s).</p>
+          ) : (
+            <p>Você não possui nenhum aviso.</p>
+          )}
         </div>
       </div>
     </div>

@@ -1,66 +1,34 @@
-import  { useState } from 'react';
+import { useState } from "react"
 
-function Configuracoes() {
-  const [configuracoes, setConfiguracoes] = useState({
-    receberNotificacoes: true,
-    temaEscuro: false,
-    idioma: 'pt-BR',
-  });
+const Configuracoes = () => {
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setConfiguracoes({
-      ...configuracoes,
-      [name]: type === 'checkbox' ? checked : value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aqui você enviaria as configurações atualizadas para a API
-    console.log('Configurações salvas:', configuracoes);
-  };
+  const [titulo,setTitulo] = useState("")
+  const [descricao,setDescricao] = useState("")
+  const [perguntas,setPerguntas] = useState("")
+  const [finalizada,setFinalizada] = useState("")
 
   return (
-    <div className="configuracoes">
-      <h1>Configurações</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div>
+      <h1>Pesquisas POST</h1>
+      <div className="add-pesquisa">
+        <form>
           <label>
-            <input
-              type="checkbox"
-              name="receberNotificacoes"
-              checked={configuracoes.receberNotificacoes}
-              onChange={handleChange}
-            />
-            Receber notificações
+            <span>Titulo</span>
+            <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)}/>
           </label>
-        </div>
-        <div>
           <label>
-            <input
-              type="checkbox"
-              name="temaEscuro"
-              checked={configuracoes.temaEscuro}
-              onChange={handleChange}
-            />
-            Tema escuro
+            <span>Descricao</span>
+            <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)}/>
           </label>
-        </div>
-        <div>
           <label>
-            Idioma:
-            <select name="idioma" value={configuracoes.idioma} onChange={handleChange}>
-              <option value="pt-BR">Português (Brasil)</option>
-              <option value="en-US">English (US)</option>
-              <option value="es-ES">Español</option>
-            </select>
+            <span>Perguntas</span>
+            <input type="text" value={perguntas} onChange={(e) => setPerguntas(e.target.value)}/>
           </label>
-        </div>
-        <button type="submit">Salvar Configurações</button>
-      </form>
+          <input type="submit" value="Enviar"/>
+        </form>
+      </div>
     </div>
-  );
+  )
 }
 
-export default Configuracoes;
+export default Configuracoes

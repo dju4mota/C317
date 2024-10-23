@@ -63,6 +63,9 @@
 .modal-footer {
   margin-top: 1.5rem;
   text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .finalizar-btn, .fechar-btn {
@@ -78,6 +81,7 @@
   background-color: #252884;
   color: white;
   margin-right: 10px;
+  
 }
 
 .finalizar-btn:hover {
@@ -92,3 +96,4 @@
 .fechar-btn:hover {
   background-color: #e0e0e0;
 }
+
