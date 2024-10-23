@@ -4,7 +4,6 @@ import br.capitalis.resultado.resposta.TipoDeResposta;
 
 public record PostPergunta(
          String titulo,
-         String descricao,
-         TipoDeResposta tipoDeResposta
+         String descricao
 ) {
 }

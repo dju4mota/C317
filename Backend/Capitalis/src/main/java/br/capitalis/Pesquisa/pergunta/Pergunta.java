@@ -21,7 +21,7 @@ public class Pergunta {
     private Long id_pergunta;
     private String titulo;
     private String descricao;
-    private String alternativas;
+    //private String alternativas;
 
     @ManyToOne
     @JoinColumn(name ="pesquisa_id", nullable = false)

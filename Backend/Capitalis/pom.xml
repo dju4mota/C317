@@ -80,6 +80,15 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version> <!-- ou mais recente -->
+                <configuration>
+                    <source>21</source>  <!-- Versão do Java -->
+                    <target>21</target>  <!-- Versão do Java -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

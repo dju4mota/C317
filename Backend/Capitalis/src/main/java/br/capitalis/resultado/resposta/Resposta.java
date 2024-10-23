@@ -16,6 +16,7 @@ public class Resposta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String alternativa_escolhida;
+
     @ManyToOne
     @JoinColumn(name ="restuladoId", nullable = false)
     private Resultado idResultado;

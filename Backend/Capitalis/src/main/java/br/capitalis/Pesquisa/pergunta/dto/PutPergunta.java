@@ -5,7 +5,7 @@ import br.capitalis.resultado.resposta.TipoDeResposta;
 public record PutPergunta(
         Long id_pergunta,
         String titulo,
-        String descricao,
-        TipoDeResposta tipoDeResposta
+        String descricao
+
 ) {
 }

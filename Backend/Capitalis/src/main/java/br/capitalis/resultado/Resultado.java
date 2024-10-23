@@ -21,7 +21,8 @@ public class Resultado {
     private Long idPesquisa;
     private Long idUsuario;
     private boolean finalizada = false;
-    @OneToMany(mappedBy = "resultado")
+
+    @OneToMany(mappedBy = "idResultado")
     private ArrayList<Resposta> respostas;
 
     public Resultado(PostResultado resultado) {
