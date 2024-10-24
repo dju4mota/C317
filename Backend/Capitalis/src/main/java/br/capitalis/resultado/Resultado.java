@@ -17,7 +17,6 @@ public class Resultado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // TODO - como linkar ids
     private Long idPesquisa;
     private Long idUsuario;
     private boolean finalizada = false;

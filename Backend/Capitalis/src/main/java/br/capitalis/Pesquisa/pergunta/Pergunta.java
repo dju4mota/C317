@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
+
 
 @Entity
 @Getter
@@ -21,7 +23,7 @@ public class Pergunta {
     private Long id_pergunta;
     private String titulo;
     private String descricao;
-    //private String alternativas;
+    private String alternativas;
 
     @ManyToOne
     @JoinColumn(name ="pesquisa_id", nullable = false)
@@ -53,6 +55,14 @@ public class Pergunta {
         }
     }
 
+
+    public String[] converterStringLista(){
+        return this.alternativas.split("-");
+    }
+
+    public String converterListaString(String[] array){
+        return String.join("-",array);
+    }
 
 
 
