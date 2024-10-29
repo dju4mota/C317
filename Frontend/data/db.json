@@ -1,88 +1,103 @@
 {
   "pesquisas": [
     {
-      "id": "9a3f",
-      "titulo": "Pesquisa 1",
-      "descricao": "1",
+      "id": "6374",
+      "titulo": "Avaliação de Desempenho e Bem-Estar Organizacional",
+      "descricao": "Esta pesquisa tem como objetivo entender melhor a sua experiência na empresa, avaliar o desempenho individual e identificar áreas onde podemos aprimorar o ambiente de trabalho e a colaboração. Suas respostas nos ajudarão a fortalecer a cultura organizacional, apoiar seu desenvolvimento profissional e promover um ambiente de trabalho equilibrado e motivador. A pesquisa é confidencial e será usada para guiar melhorias em nossas práticas internas, garantindo que todos tenham as ferramentas e o suporte necessários para alcançar seu potencial.\n\nAgradecemos pela sua participação e sinceridade nas respostas!",
       "perguntas": [
         {
           "id": 1,
-          "descricao": "2+2",
-          "alternativaEscolhida": 1,
-          "alternativas": [
-            {
-              "id": 1,
-              "texto": "4"
-            },
-            {
-              "id": 2,
-              "texto": "3"
-            }
-          ]
-        }
-      ],
-      "finalizada": true
-    },
-    {
-      "id": "a14d",
-      "titulo": "2",
-      "descricao": "2",
-      "perguntas": [
-        {
-          "id": 1,
-          "descricao": "3/3",
+          "descricao": "Você acredita que suas metas de desempenho são claras e alcançáveis?",
           "alternativaEscolhida": null,
           "alternativas": [
             {
               "id": 1,
-              "texto": "1"
+              "texto": "Sim, estão muito claras e são alcançáveis"
             },
             {
               "id": 2,
-              "texto": "2"
+              "texto": "Em geral, sim, mas poderiam ser mais detalhadas"
             },
             {
               "id": 3,
-              "texto": "3"
+              "texto": "Às vezes, não tenho certeza dos objetivos exatos"
             },
             {
               "id": 4,
-              "texto": "4"
+              "texto": "Não, as metas não estão claras para mim"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "descricao": "Como você avalia seu progresso em relação às metas estabelecidas para este período?",
+          "alternativaEscolhida": null,
+          "alternativas": [
+            {
+              "id": 1,
+              "texto": "Excelente, superando as expectativas"
             },
             {
-              "id": 5,
-              "texto": "5"
+              "id": 2,
+              "texto": "Bom, atendendo às expectativas"
+            },
+            {
+              "id": 3,
+              "texto": "Regular, há alguns desafios que dificultam o progresso"
+            },
+            {
+              "id": 4,
+              "texto": "Ruim, estou muito abaixo do esperado"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "descricao": "Como você avalia a colaboração com sua equipe?",
+          "alternativaEscolhida": null,
+          "alternativas": [
+            {
+              "id": 1,
+              "texto": "Excelente, a colaboração é muito boa"
+            },
+            {
+              "id": 2,
+              "texto": "Boa, a maioria colabora bem"
+            },
+            {
+              "id": 3,
+              "texto": "Regular, poderia melhorar em algumas áreas"
+            },
+            {
+              "id": 4,
+              "texto": "Fraca, há pouca colaboração entre os membros"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "descricao": "Você se sente confortável em compartilhar ideias e sugestões com sua equipe?",
+          "alternativaEscolhida": null,
+          "alternativas": [
+            {
+              "id": 1,
+              "texto": "Sempre"
+            },
+            {
+              "id": 2,
+              "texto": "Na maioria das vezes"
+            },
+            {
+              "id": 3,
+              "texto": "Raramente"
+            },
+            {
+              "id": 4,
+              "texto": "Nunca"
             }
           ]
         }
       ]
-    },
-    {
-      "id": "54bc",
-      "titulo": "Pesquisa 3",
-      "descricao": "3",
-      "perguntas": [
-        {
-          "id": 1,
-          "descricao": "2+2",
-          "alternativaEscolhida": 2,
-          "alternativas": [
-            {
-              "id": 1,
-              "texto": "2"
-            },
-            {
-              "id": 2,
-              "texto": "4"
-            },
-            {
-              "id": 3,
-              "texto": "6"
-            }
-          ]
-        }
-      ],
-      "finalizada": true
     }
   ]
 }
