@@ -1,7 +1,10 @@
 package br.capitalis.resultado.resposta;
 
+import br.capitalis.Pesquisa.dto.PutPesquisa;
 import br.capitalis.resultado.Resultado;
 import br.capitalis.resultado.resposta.dto.PostResposta;
+import br.capitalis.resultado.resposta.dto.PutResposta;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,6 +23,7 @@ public class Resposta {
     private Long id_pergunta;
     private String alternativaEscolhida;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name ="restuladoId", nullable = false)
     private Resultado idResultado;
@@ -31,5 +35,11 @@ public class Resposta {
     }
 
     public Resposta() {
+    }
+
+    public void atualizarDados(PutResposta dadosResposta) {
+        if(dadosResposta.alternativaEscolhida()!= null) {
+            this.alternativaEscolhida = dadosResposta.alternativaEscolhida();
+        }
     }
 }

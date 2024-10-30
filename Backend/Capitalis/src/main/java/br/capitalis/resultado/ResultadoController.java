@@ -1,11 +1,13 @@
 package br.capitalis.resultado;
 
+import br.capitalis.resultado.dto.PutResultado;
 import br.capitalis.resultado.resposta.dto.GetResposta;
 import br.capitalis.resultado.dto.GetResultado;
 import br.capitalis.resultado.dto.PostResultado;
 import br.capitalis.resultado.resposta.Resposta;
 import br.capitalis.resultado.resposta.RespostaRepository;
 import br.capitalis.resultado.resposta.dto.PostResposta;
+import br.capitalis.resultado.resposta.dto.PutResposta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -74,13 +76,13 @@ public class ResultadoController {
         return null;
     }
 
-    // todas as perguntas - TODO page
+    // todas as respostas - TODO page
     @GetMapping("/respostas")
     public Stream<GetResposta> getTodasRespostas() {
         return respostaRepository.findAll().stream().map(GetResposta::new);
     }
 
-    // 1 pergunta por ID
+    // 1 resposta por ID
     @GetMapping("/pergunta/{id_resposta}")
     public GetResposta GetRespostaPorId(@PathVariable Long id_resposta) {
         Optional<Resposta> resposta = respostaRepository.findById(id_resposta);
@@ -88,40 +90,39 @@ public class ResultadoController {
     }
 
 
-//    // ****** Update ******
-//
-//    // update pesquisa
-//    @PutMapping()
-//    @Transactional
-//    public void atualizaPesquisa(@RequestBody PutPesquisa dtoPutPesquisa) {
-//        Pesquisa pesquisa = resultadoRepository.getReferenceById(dtoPutPesquisa.id());
-//        pesquisa.atualizarDados(dtoPutPesquisa);
-//    }
-//
-//    // update pergunta
-//    @PutMapping("/pergunta")
-//    @Transactional
-//    public void atualizaPergunta(@RequestBody PutPergunta dtoPutPergunta) {
-//        Pergunta pergunta  = respostaRepository.getReferenceById(dtoPutPergunta.id_pergunta());
-//        pergunta.atualizarDados(dtoPutPergunta);
-//    }
-//
-//
-//    // ****** Delete ******
-//
-//    // delete pesquisa - TODO apagar as perguntas e respostas dessa pesquisa
-//    @DeleteMapping("/{id}")
-//    public String deletarPesquisa(@PathVariable Long id) {
-//        resultadoRepository.deleteById(id);
-//        return "Pesquisa deletada";
-//    }
-//
-//    // deletar pergunta
-//    @DeleteMapping("/pergunta/{id}")
-//    public String deletarPergunta(@PathVariable Long id) {
-//        respostaRepository.deleteById(id);
-//        return "Pergunta deletada";
-//    }
-//
+    // ****** Update ******
+
+    // update resultado
+    @PutMapping()
+    @Transactional
+    public void atualizaResultado(@RequestBody PutResultado dtoPutResultado) {
+        Resultado resultado = resultadoRepository.getReferenceById(dtoPutResultado.id());
+        resultado.atualizarDados(dtoPutResultado);
+    }
+
+    // update resposta
+    @PutMapping("/pergunta")
+    @Transactional
+    public void atualizaResposta(@RequestBody PutResposta dtoPutResposta) {
+        Resposta resposta  = respostaRepository.getReferenceById(dtoPutResposta.id());
+        resposta.atualizarDados(dtoPutResposta);
+    }
+
+
+    // ****** Delete ******
+
+    // delete resultado - TODO apagar as perguntas e respostas dessa pesquisa
+    @DeleteMapping("/{id}")
+    public String deletarResultado(@PathVariable Long id) {
+        resultadoRepository.deleteById(id);
+        return "Resultado deletada";
+    }
+
+    // deletar resposta
+    @DeleteMapping("/pergunta/{id}")
+    public String deletarResposta(@PathVariable Long id) {
+        respostaRepository.deleteById(id);
+        return "Resposta deletada";
+    }
 
 }
