@@ -22,7 +22,7 @@ public class Pesquisa {
     private Long id;
     private String titulo;
     private Long id_criador;
-    //
+
     private String descricao;
     @OneToMany(mappedBy = "pesquisa")
     private List<Pergunta> perguntas;
@@ -49,6 +49,9 @@ public class Pesquisa {
         }
         if(dadosPesquisa.titulo()!= null) {
             this.titulo = dadosPesquisa.titulo();
+        }
+        if(dadosPesquisa.descricao()!= null) {
+            this.descricao = dadosPesquisa.descricao();
         }
     }
 
