@@ -41,6 +41,7 @@ public class Pergunta {
         this.descricao = dtoPostPergunta.descricao();
         this.titulo = dtoPostPergunta.titulo();
         this.pesquisa = pesquisa;
+        this.alternativas = converterListaString(dtoPostPergunta.alternativas());
     }
 
     public Pergunta() {
@@ -58,7 +59,12 @@ public class Pergunta {
 
 
     public String[] converterStringLista(){
-        return this.alternativas.split("-");
+        try {
+            return this.alternativas.split("-");
+        } catch (Exception  e ){
+            System.out.println("NULL");
+        }
+        return null;
     }
 
     public String converterListaString(String[] array){

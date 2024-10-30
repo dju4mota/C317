@@ -110,7 +110,7 @@ public class PesquisaController {
 
     // ****** Delete ******
 
-    // delete pesquisa - TODO apagar as perguntas e respostas dessa pesquisa
+    // delete pesquisa - TODO apagar as perguntas e respostas dessa pesquisaw
     @DeleteMapping("/{id}")
     public String deletarPesquisa(@PathVariable Long id) {
         pesquisaRepository.deleteById(id);
