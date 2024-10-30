@@ -22,6 +22,8 @@ public class Pesquisa {
     private Long id;
     private String titulo;
     private Long id_criador;
+    //
+    private String descricao;
     @OneToMany(mappedBy = "pesquisa")
     private List<Pergunta> perguntas;
 

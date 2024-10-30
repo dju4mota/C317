@@ -1,7 +1,6 @@
 package br.capitalis.Pesquisa.pergunta.dto;
 
 import br.capitalis.Pesquisa.pergunta.Pergunta;
-import br.capitalis.resultado.resposta.TipoDeResposta;
 
 public record GetPergunta(
         Long id_pergunta,
