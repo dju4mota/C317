@@ -4,6 +4,7 @@ import br.capitalis.Pesquisa.Pesquisa;
 import br.capitalis.Pesquisa.pergunta.dto.PostPergunta;
 import br.capitalis.Pesquisa.pergunta.dto.PutPergunta;
 import br.capitalis.resultado.resposta.TipoDeResposta;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Pergunta {
     private String descricao;
     private String alternativas;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name ="pesquisa_id", nullable = false)
     private Pesquisa pesquisa;
@@ -39,7 +41,6 @@ public class Pergunta {
         this.descricao = dtoPostPergunta.descricao();
         this.titulo = dtoPostPergunta.titulo();
         this.pesquisa = pesquisa;
-
     }
 
     public Pergunta() {
