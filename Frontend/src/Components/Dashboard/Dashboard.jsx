@@ -1,30 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link, Outlet } from 'react-router-dom';
-import { FaChartPie, 
-  FaClipboardList, 
-  FaTasks, 
-  FaChartBar, 
-  FaUsers,  
-  FaQuestionCircle,
-  FaSignOutAlt } from 'react-icons/fa';
+import { FaChartPie, FaClipboardList, FaTasks, FaChartBar, FaUsers, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
 import './Dashboard.css';
 
 export default function Dashboard() {
-  const [activeItem, setActiveItem] = useState('visao-geral'); // Use um valor padrão que corresponda à sua rota
+  const [activeItem, setActiveItem] = useState('visao-geral');
+  const [userType, setUserType] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const storedUserType = localStorage.getItem("userType");
+    if (storedUserType) {
+      setUserType(storedUserType);
+    }
+  }, []);
+
   const handleLogout = () => {
+    localStorage.removeItem("userType"); // Limpa o tipo de usuário ao sair
     navigate('/'); // Navega para a página inicial
   };
 
-  const menuItems = [
-    { name: 'Visão Geral', icon: FaChartPie, route: 'visao-geral' },
-    { name: 'Minhas Pesquisas', icon: FaClipboardList, route: 'minhaspesquisas' },
-    { name: 'Gerenciar Pesquisas', icon: FaTasks, route: 'gerenciar-pesquisas' },
-    { name: 'Relatórios', icon: FaChartBar, route: 'relatorios' },
-    { name: 'Usuários', icon: FaUsers, route: 'usuarios' },
-    { name: 'Ajuda', icon: FaQuestionCircle, route: 'ajuda' },
+  // Itens de menu para cada tipo de usuário
+  const allMenuItems = [
+    { name: 'Visão Geral', icon: FaChartPie, route: 'visao-geral', roles: ['user'] },
+    { name: 'Minhas Pesquisas', icon: FaClipboardList, route: 'minhaspesquisas', roles: ['user'] },
+    { name: 'Gerenciar Pesquisas', icon: FaTasks, route: 'gerenciar-pesquisas', roles: ['admin'] },
+    { name: 'Relatórios', icon: FaChartBar, route: 'relatorios', roles: ['admin'] },
+    { name: 'Usuários', icon: FaUsers, route: 'usuarios', roles: ['admin'] },
+    { name: 'Ajuda', icon: FaQuestionCircle, route: 'ajuda', roles: ['user'] },
   ];
+
+  // Filtra itens de menu com base no tipo de usuário
+  const menuItems = allMenuItems.filter(item => item.roles.includes(userType));
 
   return (
     <div className="dashboard">
@@ -33,7 +40,7 @@ export default function Dashboard() {
           {menuItems.map((item) => (
             <Link
               key={item.name}
-              to={item.route} // Mude para não ter barra inicial
+              to={item.route}
               className={activeItem === item.route ? 'active' : ''}
               onClick={() => setActiveItem(item.route)}
             >

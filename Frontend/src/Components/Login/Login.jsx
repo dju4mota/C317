@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../../assets/logo.svg';
 
-
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -13,59 +12,62 @@ const Login = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (username && password) {
-            // Redireciona para a página de dashboard após o login bem-sucedido
-            navigate("/dashboard/visao-geral");
+            if (username === "user@user.com" && password === "user") {
+                localStorage.setItem("userType", "user"); // Armazena o tipo de usuário
+                navigate("/dashboard/visao-geral");
+            } else if (username === "admin@admin.com" && password === "admin") {
+                localStorage.setItem("userType", "admin"); // Armazena o tipo de usuário
+                navigate("/dashboard/gerenciar-pesquisas");
+            }
         } else {
             alert("Por favor, preencha todos os campos.");
         }
     };
 
-  return (
-    <div className="login-container">
-      <div className="login-left">
-        <img src={logo} alt="Logo da Captalis" />
-        <p>Metrificando felicidade.</p>
-      </div>
-      <div className="login-right">
-        <form onSubmit={handleSubmit} className="login-form">
-            <h1>Logar</h1>
-            <div className="input-group">
-                <input 
-                    type="email" 
-                    placeholder="E-mail"
-                    name="email" 
-                    required
-                    onChange={(e) => setUsername(e.target.value)}/>
-                <FaUser className="icon" />
+    return (
+        <div className="login-container">
+            <div className="login-left">
+                <img src={logo} alt="Logo da Captalis" />
+                <p>Metrificando felicidade.</p>
             </div>
-            <div className="input-group">
-                <input 
-                    type="password" 
-                    placeholder="Senha"
-                    name="password" 
-                    required
-                    onChange={(e) => setPassword(e.target.value)}/>
-                <FaLock className="icon" />
+            <div className="login-right">
+                <form onSubmit={handleSubmit} className="login-form">
+                    <h1>Logar</h1>
+                    <div className="input-group">
+                        <input 
+                            type="email" 
+                            placeholder="E-mail"
+                            name="email" 
+                            required
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <FaUser className="icon" />
+                    </div>
+                    <div className="input-group">
+                        <input 
+                            type="password" 
+                            placeholder="Senha"
+                            name="password" 
+                            required
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <FaLock className="icon" />
+                    </div>
+                    <div className="recall-forget">
+                        <label>
+                            <input type="checkbox"/>
+                            Lembre de mim?
+                        </label>
+                        <a href="#">Esqueceu a senha?</a>
+                    </div>
+                    <button type="submit">Entrar</button>
+                    <div className="signup-link">
+                        <p>Não tem uma conta? <a href="#">Crie aqui</a></p>
+                    </div>
+                </form>
             </div>
-
-            <div className="recall-forget">
-                <label>
-                    <input type="checkbox"/>
-                    Lembre de mim?
-                </label>
-                <a href="#">Esqueceu a senha?</a>
-            </div>
-            <button type="submit">Entrar</button>
-
-            <div className="signup-link">
-                <p>
-                    Não tem uma conta? <a href="#">Crie aqui</a>
-                </p>
-            </div>
-        </form>
-      </div>
-    </div>
-  )
+        </div>
+    );
 }
 
-export default Login
+export default Login;
