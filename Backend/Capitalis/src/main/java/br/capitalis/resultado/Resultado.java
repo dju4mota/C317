@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
 
-import java.util.ArrayList;
 @Entity
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class Resultado {
     private boolean finalizada = false;
 
     @OneToMany(mappedBy = "idResultado")
-    private ArrayList<Resposta> respostas;
+    private List<Resposta> respostas;
 
     public Resultado(PostResultado resultado) {
         this.idPesquisa = resultado.idPesquisa();
