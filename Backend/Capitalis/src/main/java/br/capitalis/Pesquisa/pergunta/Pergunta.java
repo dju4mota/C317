@@ -53,6 +53,9 @@ public class Pergunta {
         if(dadosPergunta.titulo()!= null) {
             this.titulo = dadosPergunta.titulo();
         }
+        if(dadosPergunta.alternativas() != null ){
+            this.alternativas = converterListaString(dadosPergunta.alternativas());
+        }
     }
 
 
