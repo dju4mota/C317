@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { BsX } from 'react-icons/bs';
 
+const API_URL = "http://localhost:8080/api/v1/pesquisas";
+
 const Modal = ({ pesquisa, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     id: pesquisa?.id || null,
     titulo: pesquisa?.titulo || '',
     descricao: pesquisa?.descricao || '',
-    finalizada: pesquisa?.finalizada || false,
     perguntas: pesquisa?.perguntas || []
   });
 
@@ -17,8 +18,12 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
         id: pesquisa.id,
         titulo: pesquisa.titulo,
         descricao: pesquisa.descricao,
-        finalizada: pesquisa.finalizada,
-        perguntas: pesquisa.perguntas || []
+        perguntas: pesquisa.perguntas.map(pergunta => ({
+          ...pergunta,
+          alternativas: pergunta.alternativas
+            ? pergunta.alternativas.map(alt => (typeof alt === 'string' ? { texto: alt } : alt))
+            : []
+        }))
       });
     }
   }, [pesquisa]);
@@ -31,9 +36,63 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
+
+    try {
+      const pesquisaId = formData.id;
+      const method = pesquisaId ? 'PUT' : 'POST';
+      const pesquisaBody = {
+        id: pesquisaId || undefined,
+        titulo: formData.titulo,
+        descricao: formData.descricao,
+        id_criador: 2
+      };
+
+      const respostaPesquisa = await fetch(API_URL, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pesquisaBody),
+      });
+
+      if (!respostaPesquisa.ok) {
+        console.error('Erro ao salvar pesquisa:', respostaPesquisa.status, respostaPesquisa.statusText);
+        throw new Error(`Falha ao salvar pesquisa: ${respostaPesquisa.status} ${respostaPesquisa.statusText}`);
+      }
+
+      const idPesquisa = pesquisaId || (await respostaPesquisa.json()).id;
+
+      for (const pergunta of formData.perguntas) {
+        const perguntaUrl = pergunta.id_pergunta
+          ? `${API_URL}/pergunta`
+          : `${API_URL}/${idPesquisa}/pergunta`;
+
+        const perguntaMethod = pergunta.id_pergunta ? 'PUT' : 'POST';
+        const perguntaBody = {
+          id_pergunta: pergunta.id_pergunta || undefined,
+          titulo: pergunta.titulo,
+          descricao: pergunta.descricao,
+          alternativas: pergunta.alternativas.map(alt => alt.texto || alt)
+        };
+
+        const perguntaResponse = await fetch(perguntaUrl, {
+          method: perguntaMethod,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(perguntaBody),
+        });
+
+        if (!perguntaResponse.ok) {
+          console.error('Erro ao salvar pergunta:', perguntaResponse.status, perguntaResponse.statusText);
+          throw new Error(`Falha ao salvar pergunta: ${perguntaResponse.status} ${perguntaResponse.statusText}`);
+        }
+      }
+
+      onSave(idPesquisa);
+      onClose();
+    } catch (erro) {
+      console.error('Erro ao salvar pesquisa ou perguntas:', erro);
+      alert(`Erro ao salvar: ${erro.message}`);
+    }
   };
 
   const handlePerguntaChange = (index, field, value) => {
@@ -44,36 +103,44 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
 
   const handleAlternativaChange = (perguntaIndex, alternativaIndex, value) => {
     const novasPerguntas = [...formData.perguntas];
-    novasPerguntas[perguntaIndex].alternativas[alternativaIndex].texto = value;
-    setFormData({ ...formData, perguntas: novasPerguntas });
-  };
-
-  const adicionarAlternativa = (perguntaIndex) => {
-    const novasPerguntas = [...formData.perguntas];
-    const novaAlternativa = {
-      id: novasPerguntas[perguntaIndex].alternativas.length + 1,
-      texto: ''
-    };
-    novasPerguntas[perguntaIndex].alternativas.push(novaAlternativa);
+    novasPerguntas[perguntaIndex].alternativas[alternativaIndex] = { texto: value };
     setFormData({ ...formData, perguntas: novasPerguntas });
   };
 
   const adicionarPergunta = () => {
     const novaPergunta = {
-      id: formData.perguntas.length + 1,
+      id_pergunta: null,
+      titulo: '',
       descricao: '',
-      alternativaEscolhida: null,
       alternativas: []
     };
-    setFormData({
-      ...formData,
-      perguntas: [...formData.perguntas, novaPergunta]
-    });
+    setFormData({ ...formData, perguntas: [...formData.perguntas, novaPergunta] });
   };
 
-  const removerPergunta = (perguntaIndex) => {
+  const adicionarAlternativa = (perguntaIndex) => {
+    const novasPerguntas = [...formData.perguntas];
+    novasPerguntas[perguntaIndex].alternativas.push({ texto: '' });
+    setFormData({ ...formData, perguntas: novasPerguntas });
+  };
+
+  const removerPergunta = async (perguntaIndex) => {
+    const pergunta = formData.perguntas[perguntaIndex];
     const novasPerguntas = formData.perguntas.filter((_, index) => index !== perguntaIndex);
     setFormData({ ...formData, perguntas: novasPerguntas });
+
+    if (pergunta.id_pergunta) {
+      try {
+        const deleteUrl = `${API_URL}/pergunta/${pergunta.id_pergunta}`;
+        const response = await fetch(deleteUrl, { method: 'DELETE' });
+        
+        if (!response.ok) {
+          throw new Error(`Erro ao excluir a pergunta: ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error(error);
+        alert(`Erro ao excluir pergunta: ${error.message}`);
+      }
+    }
   };
 
   const removerAlternativa = (perguntaIndex, alternativaIndex) => {
@@ -93,7 +160,7 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
               type="text"
               id="titulo"
               name="titulo"
-              value={formData.titulo}
+              value={formData.titulo || ''}
               onChange={handleChange}
               required
             />
@@ -103,7 +170,7 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
             <textarea
               id="descricao"
               name="descricao"
-              value={formData.descricao}
+              value={formData.descricao || ''}
               onChange={handleChange}
               required
             ></textarea>
@@ -112,27 +179,31 @@ const Modal = ({ pesquisa, onClose, onSave }) => {
             <label>Perguntas:</label>
             {formData.perguntas.map((pergunta, perguntaIndex) => (
               <div key={perguntaIndex} className="pergunta-container">
-                <div className="pergunta-header">
-                  <input
-                    type="text"
-                    value={pergunta.descricao}
-                    onChange={(e) => handlePerguntaChange(perguntaIndex, "descricao", e.target.value)}
-                    placeholder="Digite a pergunta"
-                    className="pergunta-input"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removerPergunta(perguntaIndex)}
-                    className="btn-remover"
-                  >
-                    <BsX />
-                  </button>
-                </div>
+                <input
+                  type="text"
+                  value={pergunta.titulo || ''}
+                  onChange={(e) => handlePerguntaChange(perguntaIndex, "titulo", e.target.value)}
+                  placeholder="Título da Pergunta"
+                  className="pergunta-input"
+                />
+                <textarea
+                  value={pergunta.descricao || ''}
+                  onChange={(e) => handlePerguntaChange(perguntaIndex, "descricao", e.target.value)}
+                  placeholder="Descrição da Pergunta"
+                  className="pergunta-descricao"
+                ></textarea>
+                <button
+                  type="button"
+                  onClick={() => removerPergunta(perguntaIndex)}
+                  className="btn-remover-pergunta"
+                >
+                  <BsX />
+                </button>
                 {pergunta.alternativas.map((alt, altIndex) => (
                   <div key={altIndex} className="alternativa-container">
                     <input
                       type="text"
-                      value={alt.texto}
+                      value={alt.texto || alt || ''}
                       onChange={(e) => handleAlternativaChange(perguntaIndex, altIndex, e.target.value)}
                       placeholder="Digite a alternativa"
                       className="alternativa-input"
@@ -179,16 +250,17 @@ Modal.propTypes = {
     id: PropTypes.number,
     titulo: PropTypes.string,
     descricao: PropTypes.string,
-    finalizada: PropTypes.bool,
     perguntas: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
+      id_pergunta: PropTypes.number,
+      titulo: PropTypes.string,
       descricao: PropTypes.string,
-      alternativaEscolhida: PropTypes.number,
-      alternativas: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        texto: PropTypes.string
-      }))
-    }))
+      alternativas: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+          PropTypes.shape({ texto: PropTypes.string }),
+          PropTypes.string
+        ])
+      ),
+    })),
   }),
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,

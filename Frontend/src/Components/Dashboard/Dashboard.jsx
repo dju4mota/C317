@@ -6,17 +6,23 @@ import './Dashboard.css';
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState('visao-geral');
   const [userType, setUserType] = useState("");
+  const [userId, setUserId] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedUserType = localStorage.getItem("userType");
+    const storedUserId = localStorage.getItem("userId")
     if (storedUserType) {
       setUserType(storedUserType);
+    }
+    if (storedUserId){
+      setUserId(storedUserId);
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("userType"); // Limpa o tipo de usuário ao sair
+    localStorage.removeItem("userId") // Limpa o ID de usuario ao sair
     navigate('/'); // Navega para a página inicial
   };
 
@@ -57,7 +63,7 @@ export default function Dashboard() {
 
       <main className="main-content">
         <div className="content-card">
-          <Outlet /> {/* Renderiza o componente da rota ativa */}
+          <Outlet context={{userId}}/> {/* Renderiza o componente da rota ativa */}
         </div>
       </main>
     </div>

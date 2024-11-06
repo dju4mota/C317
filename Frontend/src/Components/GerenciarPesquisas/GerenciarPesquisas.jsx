@@ -3,7 +3,7 @@ import { BsFillTrashFill, BsFillPencilFill, BsPlusCircle } from "react-icons/bs"
 import Modal from './Modal';
 import "./GerenciarPesquisas.css";
 
-const url = "http://localhost:3000/pesquisas";
+const API_URL = "http://localhost:8080/api/v1/pesquisas";
 
 const GerenciarPesquisas = () => {
   const [pesquisas, setPesquisas] = useState([]);
@@ -16,7 +16,7 @@ const GerenciarPesquisas = () => {
 
   const fetchPesquisas = async () => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(API_URL);
       if (!response.ok) {
         throw new Error('Falha ao buscar pesquisas');
       }
@@ -37,24 +37,9 @@ const GerenciarPesquisas = () => {
     setPesquisaAtual(null);
   };
 
-  const salvarPesquisa = async (pesquisa) => {
+  const salvarPesquisa = async (idPesquisaCriada) => {
     try {
-      const method = pesquisa.id ? 'PUT' : 'POST';
-      const urlWithId = pesquisa.id ? `${url}/${pesquisa.id}` : url;
-      
-      const response = await fetch(urlWithId, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(pesquisa),
-      });
-
-      if (!response.ok) {
-        throw new Error('Falha ao salvar pesquisa');
-      }
-
-      await fetchPesquisas(); // Recarrega a lista de pesquisas
+      await fetchPesquisas(); // Atualiza a lista de pesquisas
       fecharModal();
     } catch (error) {
       console.error('Erro ao salvar pesquisa:', error);
@@ -63,15 +48,18 @@ const GerenciarPesquisas = () => {
 
   const excluirPesquisa = async (id) => {
     try {
-      const response = await fetch(`${url}/${id}`, {
-        method: 'DELETE',
-      });
+      const perguntas = pesquisas.find(p => p.id === id)?.perguntas || [];
+      // Deletar cada pergunta da pesquisa antes de deletar a pesquisa
+      for (const pergunta of perguntas) {
+        await fetch(`${API_URL}/pergunta/${pergunta.id_pergunta}`, { method: 'DELETE' });
+      }
 
+      const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
       if (!response.ok) {
         throw new Error('Falha ao excluir pesquisa');
       }
 
-      await fetchPesquisas(); // Recarrega a lista de pesquisas
+      await fetchPesquisas();
     } catch (error) {
       console.error('Erro ao excluir pesquisa:', error);
     }

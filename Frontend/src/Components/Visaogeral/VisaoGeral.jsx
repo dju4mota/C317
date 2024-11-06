@@ -3,11 +3,13 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import "./VisaoGeral.css"
+import { useOutletContext } from 'react-router-dom';
 
 // Registrar os componentes e o plugin no ChartJS
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const API_URL = 'http://localhost:3000/pesquisas';
+const API_PESQUISAS_URL = 'http://localhost:8080/api/v1/pesquisas';
+const API_RESULTADOS_URL = 'http://localhost:8080/api/v1/resultados';
 
 const VisaoGeral = () => {
   const [pesquisasPorEstado, setPesquisasPorEstado] = useState({
@@ -15,19 +17,30 @@ const VisaoGeral = () => {
     respondida: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const { userId } = useOutletContext();
 
   useEffect(() => {
-    const fetchPesquisas = async () => {
+    const fetchDados = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error('Falha ao buscar pesquisas');
+        const [pesquisasResponse, resultadosResponse] = await Promise.all([
+          fetch(API_PESQUISAS_URL),
+          fetch(`${API_RESULTADOS_URL}?idUsuario=${userId}`)
+        ]);
+
+        if (!pesquisasResponse.ok || !resultadosResponse.ok) {
+          throw new Error('Falha ao buscar dados');
         }
-        const pesquisas = await response.json();
-        
+
+        const [pesquisas, resultados] = await Promise.all([
+          pesquisasResponse.json(),
+          resultadosResponse.json()
+        ]);
+
+        // Verificar quais pesquisas foram respondidas pelo usuário
+        const pesquisasRespondidasIds = new Set(resultados.map(r => r.idPesquisa));
         const estados = pesquisas.reduce((acc, pesquisa) => {
-          if (pesquisa.finalizada) {
+          if (pesquisasRespondidasIds.has(pesquisa.id)) {
             acc.respondida += 1;
           } else {
             acc.naoRespondida += 1;
@@ -37,13 +50,13 @@ const VisaoGeral = () => {
 
         setPesquisasPorEstado(estados);
       } catch (error) {
-        console.error("Erro ao buscar pesquisas:", error);
+        console.error("Erro ao buscar dados:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchPesquisas();
+    fetchDados();
   }, []);
 
   const data = {

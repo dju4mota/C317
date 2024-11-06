@@ -1,67 +1,80 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ClipboardList } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import Modal from './Modal';
-import "./MinhasPesquisas.css";
+import './MinhasPesquisas.css';
 
-const API_URL = 'http://localhost:3000/pesquisas';
+const API_URL = 'http://localhost:8080/api/v1/pesquisas';
+const RESULTADOS_URL = 'http://localhost:8080/api/v1/resultados';
 
-const MinhasPesquisas = () => {
+export default function MinhasPesquisas() {
   const [pesquisas, setPesquisas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalAberto, setModalAberto] = useState(false);
-  const [pesquisaAtualId, setPesquisaAtualId] = useState(null);
+  const [pesquisasRespondidas, setPesquisasRespondidas] = useState(new Set());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pesquisaSelecionada, setPesquisaSelecionada] = useState(null);
+  const [resultados, setResultados] = useState([]);
+  const { userId } = useOutletContext();
+
+  const fetchPesquisas = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error('Falha ao buscar pesquisas');
+      }
+      const data = await response.json();
+      setPesquisas(data);
+    } catch (error) {
+      console.error("Erro ao buscar pesquisas:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchResultados = async () => {
+    try {
+      const response = await fetch(`${RESULTADOS_URL}?idUsuario=${userId}`);
+      if (!response.ok) {
+        throw new Error('Falha ao buscar resultados');
+      }
+      const resultados = await response.json();
+
+      const respondidas = new Set(
+        resultados.map(resultado => resultado.idPesquisa)
+      );
+
+      setPesquisasRespondidas(respondidas);
+      setResultados(resultados);
+    } catch (error) {
+      console.error("Erro ao buscar resultados:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchPesquisas = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error('Falha ao buscar pesquisas');
-        }
-        const data = await response.json();
-        setPesquisas(data);
-      } catch (error) {
-        console.error("Erro ao buscar pesquisas:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchPesquisas();
-  }, []);
+    fetchResultados();
+  }, [userId]);
 
-  const abrirModal = useCallback((pesquisaId) => {
-    setPesquisaAtualId(pesquisaId);
-    setModalAberto(true);
-  }, []);
+  const handleButtonClick = (pesquisa) => {
+    const resultadoDoUsuario = resultados.find(
+      resultado => resultado.idPesquisa === pesquisa.id
+    );
 
-  const fecharModal = useCallback(() => {
-    setModalAberto(false);
-    setPesquisaAtualId(null);
-  }, []);
+    const respostasDoUsuario = resultadoDoUsuario?.respostas || [];
+    const finalizada = resultadoDoUsuario?.finalizada || false;
 
-  const atualizarPesquisa = useCallback(async (pesquisaAtualizada) => {
-    try {
-      const response = await fetch(`${API_URL}/${pesquisaAtualizada.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(pesquisaAtualizada),
-      });
+    setPesquisaSelecionada({ ...pesquisa, respostasDoUsuario, finalizada });
+    setIsModalOpen(true);
+  };
 
-      if (!response.ok) {
-        throw new Error('Falha ao atualizar pesquisa');
-      }
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setPesquisaSelecionada(null);
+  };
 
-      setPesquisas(prevPesquisas =>
-        prevPesquisas.map(p => p.id === pesquisaAtualizada.id ? pesquisaAtualizada : p)
-      );
-    } catch (error) {
-      console.error("Erro ao atualizar pesquisa:", error);
-    }
-  }, []);
+  const onPesquisaRespondida = (idPesquisa) => {
+    setPesquisasRespondidas(prev => new Set(prev).add(idPesquisa));
+  };
 
   if (isLoading) {
     return (
@@ -71,45 +84,34 @@ const MinhasPesquisas = () => {
     );
   }
 
-  const pesquisaAtual = pesquisas.find(p => p.id === pesquisaAtualId);
-
   return (
     <div className="minhas-pesquisas-container">
       <h1>Minhas Pesquisas</h1>
       {pesquisas.length === 0 ? (
         <p className="no-pesquisas">Você ainda não tem pesquisas disponíveis.</p>
       ) : (
-        <div>
+        <div className="pesquisas-list">
           {pesquisas.map((pesquisa) => (
             <div key={pesquisa.id} className="pesquisa-item">
               <div className="pesquisa-info">
                 <h2>{pesquisa.titulo}</h2>
                 <p>{pesquisa.descricao}</p>
-                <div className="pesquisa-meta">
-                  <ClipboardList size={16} />
-                  <span>{pesquisa.perguntas.length} pergunta(s)</span>
-                </div>
-                <div className={`pesquisa-status ${pesquisa.finalizada ? 'finalizada' : 'em-andamento'}`}>
-                  {pesquisa.finalizada ? 'Finalizada' : 'Em andamento'}
-                </div>
               </div>
-              <button className="ver-detalhes-btn" onClick={() => abrirModal(pesquisa.id)}>
-                {pesquisa.finalizada ? "Ver respostas" : "Responder"}
+              <button onClick={() => handleButtonClick(pesquisa)} className="responder-btn">
+                {pesquisasRespondidas.has(pesquisa.id) ? "Ver Respostas" : "Responder"}
               </button>
             </div>
           ))}
         </div>
       )}
-
-      {modalAberto && pesquisaAtual && (
-        <Modal 
-          pesquisa={pesquisaAtual} 
-          onClose={fecharModal} 
-          onSave={atualizarPesquisa}
+      {isModalOpen && (
+        <Modal
+          pesquisa={pesquisaSelecionada}
+          onClose={closeModal}
+          userId={Number(userId)}
+          onPesquisaRespondida={onPesquisaRespondida}
         />
       )}
     </div>
   );
-};
-
-export default MinhasPesquisas;
+}

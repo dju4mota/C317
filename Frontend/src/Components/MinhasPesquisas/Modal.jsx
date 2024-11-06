@@ -1,99 +1,169 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import "./Modal.css";
+import './Modal.css';
 
-const Modal = ({ pesquisa, onClose, onSave }) => {
-  const [respostas, setRespostas] = useState(
-    pesquisa.perguntas.reduce((acc, pergunta) => {
-      acc[pergunta.id] = pergunta.alternativaEscolhida;
-      return acc;
-    }, {})
-  );
+const API_URL = 'http://localhost:8080/api/v1';
 
-  const handleRespostaChange = useCallback((perguntaId, alternativaId) => {
-    if (!pesquisa.finalizada) {
-      setRespostas(prevRespostas => ({
-        ...prevRespostas,
-        [perguntaId]: alternativaId
-      }));
-    }
-  }, [pesquisa.finalizada]);
+export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida }) {
+  const { id: idPesquisa, perguntas, respostasDoUsuario, finalizada } = pesquisa;
+  const [respostas, setRespostas] = useState({});
+  const [enviando, setEnviando] = useState(false);
+  const [respostaEnviada, setRespostaEnviada] = useState(false);
 
-  const handleFinalizar = async () => {
-    const pesquisaAtualizada = {
-      ...pesquisa,
-      finalizada: true,
-      perguntas: pesquisa.perguntas.map(pergunta => ({
-        ...pergunta,
-        alternativaEscolhida: respostas[pergunta.id]
-      }))
-    };
-    await onSave(pesquisaAtualizada);
-    onClose();
+  useEffect(() => {
+    const respostasIniciais = {};
+    perguntas.forEach(pergunta => {
+      const respostaExistente = respostasDoUsuario.find(r => r.id_pergunta === pergunta.id_pergunta);
+      if (respostaExistente) {
+        respostasIniciais[pergunta.id_pergunta] = respostaExistente.alternativaEscolhida;
+      }
+    });
+    setRespostas(respostasIniciais);
+  }, [perguntas, respostasDoUsuario]);
+
+  const handleRespostaChange = (idPergunta, alternativa) => {
+    setRespostas(prev => ({ ...prev, [idPergunta]: alternativa }));
   };
+
+  const todasPerguntasRespondidas = () => {
+    return perguntas.every(pergunta => respostas[pergunta.id_pergunta]);
+  };
+
+  const enviarRespostas = async () => {
+    if (enviando || finalizada) return; // Não envia se já estiver finalizada
+    setEnviando(true);
+
+    try {
+      const verificacaoResponse = await fetch(`${API_URL}/resultados?idPesquisa=${idPesquisa}&idUsuario=${userId}`);
+      if (!verificacaoResponse.ok) return;
+
+      const resultadosExistentes = await verificacaoResponse.json();
+      if (resultadosExistentes.some(resultado => resultado.idPesquisa === idPesquisa && resultado.idUsuario === parseInt(userId))) {
+        setEnviando(false);
+        return;
+      }
+
+      const resultadoResponse = await fetch(`${API_URL}/resultados`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          idPesquisa,
+          idUsuario: parseInt(userId),
+          finalizada: true  // Garantindo que finalizada seja true
+        })
+      });
+
+      if (!resultadoResponse.ok) return;
+
+      const resultadosAtualizados = await fetch(`${API_URL}/resultados`).then(res => res.json());
+      const novoResultado = resultadosAtualizados.find(r => r.idPesquisa === idPesquisa && r.idUsuario === parseInt(userId));
+      if (!novoResultado) return;
+
+      for (const [idPergunta, alternativaEscolhida] of Object.entries(respostas)) {
+        const respostaResponse = await fetch(`${API_URL}/resultados/${novoResultado.id}/resposta`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            alternativaEscolhida,
+            id_pergunta: parseInt(idPergunta)
+          })
+        });
+
+        if (!respostaResponse.ok) return;
+      }
+
+      setRespostaEnviada(true);
+      onPesquisaRespondida(idPesquisa);
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  const fecharEAtualizar = () => {
+    onClose();
+    window.location.reload();
+  };
+
+  if (respostaEnviada) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Pesquisa Respondida</h2>
+          <p>Suas respostas foram enviadas com sucesso. Obrigado por participar!</p>
+          <button onClick={fecharEAtualizar} className="fechar-btn">Fechar e Atualizar</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
+      <div className="modal-content">
         <h2>{pesquisa.titulo}</h2>
         <p>{pesquisa.descricao}</p>
-
-        <div>
-          <h3>Perguntas:</h3>
-          {pesquisa.perguntas.map((pergunta) => (
-            <div key={pergunta.id} className="pergunta-container">
-              <p><strong>{pergunta.descricao}</strong></p>
-              <div className="alternativas-container">
-                {pergunta.alternativas.map((alternativa) => (
-                  <label key={alternativa.id} className="alternativa-label">
-                    <input
-                      type="radio"
-                      name={`pergunta-${pesquisa.id}-${pergunta.id}`}
-                      value={alternativa.id}
-                      checked={respostas[pergunta.id] === alternativa.id}
-                      onChange={() => handleRespostaChange(pergunta.id, alternativa.id)}
-                      disabled={pesquisa.finalizada}
-                    />
-                    {alternativa.texto}
-                  </label>
-                ))}
-              </div>
+        {perguntas.map((pergunta) => (
+          <div key={pergunta.id_pergunta} className="pergunta-container">
+            <h2>{pergunta.titulo}</h2>
+            <p>{pergunta.descricao}</p>
+            <div className="alternativas-container">
+              {pergunta.alternativas.map((alternativa) => (
+                <label key={alternativa} className="alternativa-label">
+                  <input
+                    type="radio"
+                    name={`pergunta-${pergunta.id_pergunta}`}
+                    value={alternativa}
+                    checked={respostas[pergunta.id_pergunta] === alternativa}
+                    onChange={() => handleRespostaChange(pergunta.id_pergunta, alternativa)}
+                    disabled={finalizada} // Desabilita as opções se a pesquisa estiver finalizada
+                  />
+                  {alternativa}
+                </label>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
         <div className="modal-footer">
-          {!pesquisa.finalizada && (
-            <button onClick={handleFinalizar} className="finalizar-btn">
-              Enviar Respostas
+          {!finalizada && (
+            <button
+              onClick={enviarRespostas}
+              disabled={!todasPerguntasRespondidas() || enviando}
+              className="enviar-btn"
+            >
+              {enviando ? "Enviando..." : "Enviar Respostas"}
             </button>
           )}
           <button onClick={onClose} className="fechar-btn">
-            {pesquisa.finalizada ? "Fechar" : "Cancelar"}
+            Fechar
           </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
+// Definindo a validação das props
 Modal.propTypes = {
   pesquisa: PropTypes.shape({
     id: PropTypes.number.isRequired,
     titulo: PropTypes.string.isRequired,
     descricao: PropTypes.string.isRequired,
+    perguntas: PropTypes.arrayOf(
+      PropTypes.shape({
+        id_pergunta: PropTypes.number.isRequired,
+        titulo: PropTypes.string.isRequired,
+        descricao: PropTypes.string.isRequired,
+        alternativas: PropTypes.arrayOf(PropTypes.string).isRequired,
+      })
+    ).isRequired,
+    respostasDoUsuario: PropTypes.arrayOf(
+      PropTypes.shape({
+        id_pergunta: PropTypes.number.isRequired,
+        alternativaEscolhida: PropTypes.string.isRequired,
+      })
+    ),
     finalizada: PropTypes.bool.isRequired,
-    perguntas: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      descricao: PropTypes.string.isRequired,
-      alternativaEscolhida: PropTypes.number,
-      alternativas: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        texto: PropTypes.string.isRequired
-      })).isRequired
-    })).isRequired
   }).isRequired,
   onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired
+  userId: PropTypes.number.isRequired,
+  onPesquisaRespondida: PropTypes.func.isRequired,
 };
-
-export default Modal;
