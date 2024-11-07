@@ -9,6 +9,7 @@ const GerenciarPesquisas = () => {
   const [pesquisas, setPesquisas] = useState([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [pesquisaAtual, setPesquisaAtual] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false); // Estado para controle do modo de edição
 
   useEffect(() => {
     fetchPesquisas();
@@ -27,14 +28,27 @@ const GerenciarPesquisas = () => {
     }
   };
 
-  const abrirModal = (pesquisa = null) => {
-    setPesquisaAtual(pesquisa || { titulo: '', descricao: '', perguntas: [] });
+  const abrirModal = (pesquisa = null, editMode = false) => {
+    setPesquisaAtual(
+      pesquisa
+        ? {
+            ...pesquisa,
+            perguntas: pesquisa.perguntas.map(pergunta => ({
+              ...pergunta,
+              alternativas: pergunta.alternativas.map(alt => ({ texto: alt }))
+            }))
+          }
+        : { titulo: '', descricao: '', perguntas: [] }
+    );
+    setIsEditMode(editMode); // Define o modo de edição
     setModalAberto(true);
   };
+  
 
   const fecharModal = () => {
     setModalAberto(false);
     setPesquisaAtual(null);
+    setIsEditMode(false); // Reseta o modo de edição ao fechar o modal
   };
 
   const salvarPesquisa = async (idPesquisaCriada) => {
@@ -49,7 +63,6 @@ const GerenciarPesquisas = () => {
   const excluirPesquisa = async (id) => {
     try {
       const perguntas = pesquisas.find(p => p.id === id)?.perguntas || [];
-      // Deletar cada pergunta da pesquisa antes de deletar a pesquisa
       for (const pergunta of perguntas) {
         await fetch(`${API_URL}/pergunta/${pergunta.id_pergunta}`, { method: 'DELETE' });
       }
@@ -68,7 +81,7 @@ const GerenciarPesquisas = () => {
   return (
     <div className="gerenciar-pesquisas">
       <h1>Gerenciar Pesquisas</h1>
-      <button className="btn-adicionar" onClick={() => abrirModal()}>
+      <button className="btn-adicionar" onClick={() => abrirModal(null, false)}>
         <BsPlusCircle /> Adicionar Pesquisa
       </button>
       <div className="table-wrapper">
@@ -87,7 +100,7 @@ const GerenciarPesquisas = () => {
                 <td>{pesquisa.descricao}</td>
                 <td>
                   <span className="actions">
-                    <BsFillPencilFill className="edit" onClick={() => abrirModal(pesquisa)} />
+                    <BsFillPencilFill className="edit" onClick={() => abrirModal(pesquisa, true)} />
                     <BsFillTrashFill className="delete" onClick={() => excluirPesquisa(pesquisa.id)} />
                   </span>
                 </td>
@@ -99,6 +112,7 @@ const GerenciarPesquisas = () => {
       {modalAberto && (
         <Modal
           pesquisa={pesquisaAtual}
+          isEditMode={isEditMode}
           onClose={fecharModal}
           onSave={salvarPesquisa}
         />
