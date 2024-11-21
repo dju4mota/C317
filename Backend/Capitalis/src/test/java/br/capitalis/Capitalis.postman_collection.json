@@ -1,0 +1,678 @@
+{
+	"info": {
+		"_postman_id": "6ccd7903-20a2-4620-b181-5aba98e015f6",
+		"name": "Capitalis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38387090"
+	},
+	"item": [
+		{
+			"name": "Get all pesquisas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pesquisa por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.id).to.eql(123456);\r",
+							"  pm.expect(responseJson.titulo).to.eql(\"pesquisa teste\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get pergunta por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.id).to.eql(123456);\r",
+							"  pm.expect(responseJson.titulo).to.eql(\"pesquisa teste\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/pergunta/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"pergunta",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get todas perguntas de 1 pesquisa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"  const responseJson = pm.response.json()[0];\r",
+							"  pm.expect(responseJson.id_pergunta).to.eql(123456);\r",
+							"  pm.expect(responseJson.titulo).to.eql(\"pergunta de teste\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/1/perguntas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"1",
+						"perguntas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get todas perguntas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"  const responseJson = pm.response.json()[0];\r",
+							"  pm.expect(responseJson.id_pergunta).to.eql(123456);\r",
+							"  pm.expect(responseJson.titulo).to.eql(\"pergunta de teste\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/perguntas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"perguntas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Pesquisa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Pesquisa criada\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_criador\": 214,\r\n    \"titulo\": \"pesquisa nova\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Pergunta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Pergunta criada\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"titulo\": \"pesquisa adsadadsadsaas\",\r\n    \"descricao\": \"dsadasdas ?\",\r\n    \"tipoDeResposta\": \"Numerico\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/3/pergunta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"3",
+						"pergunta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualiza pesquisa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.id).to.eql(12567);\r",
+							"    pm.expect(responseJson.titulo).to.eql(\"pesquisa nova atualizada\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 12567,\r\n    \"id_criador\": 214,\r\n    \"titulo\": \"pesquisa nova atualizada\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Pesquisa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pesquisa \", () => {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Pesquisa deletada\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/12567",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"12567"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pesquisa por ID inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status 404 - Pesquisa não encontrada\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"error\", \"Pesquisa não encontrada\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/9999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Título duplicado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status 409 - Título duplicado\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"error\", \"Título já cadastrado\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Pesquisa Existente\",\r\n  \"descricao\": \"Tentativa de título duplicado\",\r\n  \"perguntas\": [\r\n    {\"texto\": \"Pergunta 1\"},\r\n    {\"texto\": \"Pergunta 2\"}\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Pergunta associada",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status 409 - Pesquisa com perguntas vinculadas\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"error\", \"Não é possível excluir uma pesquisa com perguntas associadas\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put Atualizar pergunta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status 200 - Perguntas atualizadas\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.perguntas).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.perguntas[0].texto).to.eql(\"Pergunta Atualizada 1\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"perguntas\": [\r\n    {\"texto\": \"Pergunta Atualizada 1\"},\r\n    {\"texto\": \"Pergunta Atualizada 2\"}\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/1/pergunta",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"1",
+						"pergunta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get com query",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Post Pergunta sem texto",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas/1/perguntas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas",
+						"1",
+						"perguntas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete com query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status 200 - Todas as pesquisas excluídas\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"message\", \"Todas as pesquisas foram excluídas\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pesquisas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pesquisas"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
