@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import './Modal.css';
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import "./Modal.css";
 
-const API_URL = 'http://localhost:8080/api/v1';
+const API_URL = "http://localhost:8080/api/v1";
 
 export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida }) {
   const { id: idPesquisa, perguntas, respostasDoUsuario, finalizada } = pesquisa;
@@ -12,8 +12,10 @@ export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida 
 
   useEffect(() => {
     const respostasIniciais = {};
-    perguntas.forEach(pergunta => {
-      const respostaExistente = respostasDoUsuario.find(r => r.id_pergunta === pergunta.id_pergunta);
+    perguntas.forEach((pergunta) => {
+      const respostaExistente = respostasDoUsuario.find(
+        (r) => r.id_pergunta === pergunta.id_pergunta
+      );
       if (respostaExistente) {
         respostasIniciais[pergunta.id_pergunta] = respostaExistente.alternativaEscolhida;
       }
@@ -22,11 +24,11 @@ export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida 
   }, [perguntas, respostasDoUsuario]);
 
   const handleRespostaChange = (idPergunta, alternativa) => {
-    setRespostas(prev => ({ ...prev, [idPergunta]: alternativa }));
+    setRespostas((prev) => ({ ...prev, [idPergunta]: alternativa }));
   };
 
   const todasPerguntasRespondidas = () => {
-    return perguntas.every(pergunta => respostas[pergunta.id_pergunta]);
+    return perguntas.every((pergunta) => respostas[pergunta.id_pergunta]);
   };
 
   const enviarRespostas = async () => {
@@ -34,40 +36,54 @@ export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida 
     setEnviando(true);
 
     try {
-      const verificacaoResponse = await fetch(`${API_URL}/resultados?idPesquisa=${idPesquisa}&idUsuario=${userId}`);
+      const verificacaoResponse = await fetch(
+        `${API_URL}/resultados?idPesquisa=${idPesquisa}&idUsuario=${userId}`
+      );
       if (!verificacaoResponse.ok) return;
 
       const resultadosExistentes = await verificacaoResponse.json();
-      if (resultadosExistentes.some(resultado => resultado.idPesquisa === idPesquisa && resultado.idUsuario === parseInt(userId))) {
+      if (
+        resultadosExistentes.some(
+          (resultado) =>
+            resultado.idPesquisa === idPesquisa && resultado.idUsuario === parseInt(userId)
+        )
+      ) {
         setEnviando(false);
         return;
       }
 
       const resultadoResponse = await fetch(`${API_URL}/resultados`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           idPesquisa,
           idUsuario: parseInt(userId),
-          finalizada: true  // Garantindo que finalizada seja true
-        })
+          finalizada: true, // Garantindo que finalizada seja true
+        }),
       });
 
       if (!resultadoResponse.ok) return;
 
-      const resultadosAtualizados = await fetch(`${API_URL}/resultados`).then(res => res.json());
-      const novoResultado = resultadosAtualizados.find(r => r.idPesquisa === idPesquisa && r.idUsuario === parseInt(userId));
+      const resultadosAtualizados = await fetch(`${API_URL}/resultados`).then((res) =>
+        res.json()
+      );
+      const novoResultado = resultadosAtualizados.find(
+        (r) => r.idPesquisa === idPesquisa && r.idUsuario === parseInt(userId)
+      );
       if (!novoResultado) return;
 
       for (const [idPergunta, alternativaEscolhida] of Object.entries(respostas)) {
-        const respostaResponse = await fetch(`${API_URL}/resultados/${novoResultado.id}/resposta`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            alternativaEscolhida,
-            id_pergunta: parseInt(idPergunta)
-          })
-        });
+        const respostaResponse = await fetch(
+          `${API_URL}/resultados/${novoResultado.id}/resposta`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              alternativaEscolhida,
+              id_pergunta: parseInt(idPergunta),
+            }),
+          }
+        );
 
         if (!respostaResponse.ok) return;
       }
@@ -84,13 +100,17 @@ export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida 
     window.location.reload();
   };
 
+  console.log("Finalizada:", finalizada); // Para depuração
+
   if (respostaEnviada) {
     return (
       <div className="modal-overlay">
         <div className="modal-content">
           <h2>Pesquisa Respondida</h2>
           <p>Suas respostas foram enviadas com sucesso. Obrigado por participar!</p>
-          <button onClick={fecharEAtualizar} className="fechar-btn">Fechar e Atualizar</button>
+          <button onClick={fecharEAtualizar} className="fechar-btn">
+            Fechar e Atualizar
+          </button>
         </div>
       </div>
     );
@@ -114,7 +134,7 @@ export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida 
                     value={alternativa}
                     checked={respostas[pergunta.id_pergunta] === alternativa}
                     onChange={() => handleRespostaChange(pergunta.id_pergunta, alternativa)}
-                    disabled={finalizada} // Desabilita as opções se a pesquisa estiver finalizada
+                    disabled={finalizada} // Alternativas desabilitadas se a pesquisa estiver finalizada
                   />
                   {alternativa}
                 </label>
@@ -122,8 +142,13 @@ export default function Modal({ pesquisa, onClose, userId, onPesquisaRespondida 
             </div>
           </div>
         ))}
+
         <div className="modal-footer">
-          {!finalizada && (
+          {finalizada ? (
+            <p className="finalizada-msg">
+              Esta pesquisa já foi finalizada. Você não pode alterar as respostas.
+            </p>
+          ) : (
             <button
               onClick={enviarRespostas}
               disabled={!todasPerguntasRespondidas() || enviando}

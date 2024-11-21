@@ -56,16 +56,26 @@ export default function MinhasPesquisas() {
   }, [userId]);
 
   const handleButtonClick = (pesquisa) => {
+    // Encontra se há um resultado do usuário para essa pesquisa
     const resultadoDoUsuario = resultados.find(
-      resultado => resultado.idPesquisa === pesquisa.id
+      (resultado) =>
+        resultado.idUsuario == userId && // Verifica o ID do usuário
+        resultado.idPesquisa == pesquisa.id // Verifica o ID da pesquisa
     );
-
+  
+    // Determina as respostas do usuário e se a pesquisa foi finalizada
     const respostasDoUsuario = resultadoDoUsuario?.respostas || [];
-    const finalizada = resultadoDoUsuario?.finalizada || false;
-
+    const finalizada = !!resultadoDoUsuario; // Finalizada se o resultado existir
+  
+    console.log("Resultado do Usuário:", resultadoDoUsuario); // Para debug
+    console.log("Finalizada:", finalizada); // Para debug
+  
+    // Atualiza a pesquisa selecionada com as informações do resultado
     setPesquisaSelecionada({ ...pesquisa, respostasDoUsuario, finalizada });
     setIsModalOpen(true);
   };
+  
+
 
   const closeModal = () => {
     setIsModalOpen(false);
