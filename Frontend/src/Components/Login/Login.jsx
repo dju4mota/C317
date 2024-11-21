@@ -15,7 +15,7 @@ const Login = () => {
             if (username === "user@user.com" && password === "user") {
                 localStorage.setItem("userType", "user"); // Armazena o tipo de usuário
                 localStorage.setItem("userId", "1"); // Armazena o ID do usuário
-                navigate("/dashboard/minhaspesquisas");
+                navigate("/dashboard/visao-geral");
             } else if (username === "admin@admin.com" && password === "admin") {
                 localStorage.setItem("userType", "admin"); // Armazena o tipo de usuário
                 localStorage.setItem("userId", "2"); // Armazena o ID do admin
